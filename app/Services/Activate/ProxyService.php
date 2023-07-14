@@ -11,6 +11,8 @@ use App\Services\External\BottApi;
 use App\Services\External\ProxyApi;
 use App\Services\MainService;
 use AmrShawky\LaravelCurrency\Facade\Currency;
+use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions;
 
 class ProxyService extends MainService
 {
@@ -409,17 +411,42 @@ class ProxyService extends MainService
      */
     public function cronUpdateStatus()
     {
+        try {
         $statuses = [Order::ORDER_ACTIVE];
 
         $orders = Order::query()->whereIn('status_org', $statuses)
             ->where('end_time', '<=', time())->get();
 
         echo "START count:" . count($orders) . PHP_EOL;
+
+        $start_text = "Proxy Start count: " . count($orders) . PHP_EOL;
+        $this->notifyTelegram($start_text);
+
         foreach ($orders as $key => $order) {
             echo $order->id . PHP_EOL;
             $order->status_org = Order::ORDER_FINISH;
             $order->save();
             echo "FINISH" . $order->id . PHP_EOL;
         }
+
+            $finish_text = "Proxy finish count: " . count($orders) . PHP_EOL;
+            $this->notifyTelegram($finish_text);
+
+        } catch (\Exception $e) {
+            $this->notifyTelegram($e->getMessage());
+        }
+    }
+
+    public function notifyTelegram($text)
+    {
+        $client = new Client();
+
+        $client->post('https://api.telegram.org/bot6331654488:AAEmDoHZLV6D3YYShrwdanKlWCbo9nBjQy4/sendMessage', [
+
+            RequestOptions::JSON => [
+                'chat_id' => 398981226,
+                'text' => $text,
+            ]
+        ]);
     }
 }
