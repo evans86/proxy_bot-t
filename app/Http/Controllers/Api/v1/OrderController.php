@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Dto\BotFactory;
 use App\Helpers\ApiHelpers;
+use App\Helpers\BotLogHelpers;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\api\OrderResource;
 use App\Models\Country\Country;
@@ -73,7 +74,9 @@ class OrderController extends Controller
             return ApiHelpers::success($result);
 
         } catch (Exception $e) {
-            return ApiHelpers::errorNew($e->getMessage());
+            BotLogHelpers::notifyBotLog('(🔵Proxy): ' . $e->getMessage());
+            \Log::error($e->getMessage());
+            return ApiHelpers::error('Orders error');
         }
     }
 

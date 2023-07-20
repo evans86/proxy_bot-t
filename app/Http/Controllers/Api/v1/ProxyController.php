@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Dto\BotFactory;
 use App\Helpers\ApiHelpers;
+use App\Helpers\BotLogHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\Bot\Bot;
 use App\Models\User\User;
@@ -42,7 +43,9 @@ class ProxyController extends Controller
 
             return ApiHelpers::success($result);
         } catch (\RuntimeException $e) {
-            return ApiHelpers::errorNew($e->getMessage());
+            BotLogHelpers::notifyBotLog('(🔵Proxy): ' . $e->getMessage());
+            \Log::error($e->getMessage());
+            return ApiHelpers::error('Get proxy error');
         }
     }
 
@@ -70,7 +73,9 @@ class ProxyController extends Controller
 
             return ApiHelpers::success($result);
         } catch (\RuntimeException $e) {
-            return ApiHelpers::errorNew($e->getMessage());
+            BotLogHelpers::notifyBotLog('(🔵Proxy): ' . $e->getMessage());
+            \Log::error($e->getMessage());
+            return ApiHelpers::error('Get count error');
         }
     }
 
@@ -100,7 +105,9 @@ class ProxyController extends Controller
 
             return ApiHelpers::success($result);
         } catch (\RuntimeException $e) {
-            return ApiHelpers::errorNew($e->getMessage());
+            BotLogHelpers::notifyBotLog('(🔵Proxy): ' . $e->getMessage());
+            \Log::error($e->getMessage());
+            return ApiHelpers::error('Get price error');
         }
     }
 
@@ -159,7 +166,9 @@ class ProxyController extends Controller
 
             return ApiHelpers::success($response);
         } catch (\RuntimeException $e) {
-            return ApiHelpers::errorNew($e->getMessage());
+            BotLogHelpers::notifyBotLog('(🔵Proxy): ' . $e->getMessage());
+            \Log::error($e->getMessage());
+            return ApiHelpers::error('Buy proxy error');
         }
     }
 
@@ -198,7 +207,9 @@ class ProxyController extends Controller
             );
             return ApiHelpers::success($result);
         } catch (\RuntimeException $e) {
-            return ApiHelpers::errorNew($e->getMessage());
+            BotLogHelpers::notifyBotLog('(🔵Proxy): ' . $e->getMessage());
+            \Log::error($e->getMessage());
+            return ApiHelpers::error('Get orders error');
         }
     }
 
@@ -240,7 +251,9 @@ class ProxyController extends Controller
             );
             return ApiHelpers::success($result);
         } catch (\RuntimeException $e) {
-            return ApiHelpers::errorNew($e->getMessage());
+            BotLogHelpers::notifyBotLog('(🔵Proxy): ' . $e->getMessage());
+            \Log::error($e->getMessage());
+            return ApiHelpers::error('Check work error');
         }
     }
 
@@ -285,7 +298,9 @@ class ProxyController extends Controller
             );
             return ApiHelpers::success($result);
         } catch (\RuntimeException $e) {
-            return ApiHelpers::errorNew($e->getMessage());
+            BotLogHelpers::notifyBotLog('(🔵Proxy): ' . $e->getMessage());
+            \Log::error($e->getMessage());
+            return ApiHelpers::error('Update type error');
         }
     }
 
@@ -328,7 +343,9 @@ class ProxyController extends Controller
 
             return ApiHelpers::success($result);
         } catch (\RuntimeException $e) {
-            return ApiHelpers::errorNew($e->getMessage());
+            BotLogHelpers::notifyBotLog('(🔵Proxy): ' . $e->getMessage());
+            \Log::error($e->getMessage());
+            return ApiHelpers::error('Delete proxy error');
         }
     }
 
@@ -381,7 +398,9 @@ class ProxyController extends Controller
 
             return ApiHelpers::success($result);
         } catch (\RuntimeException $e) {
-            return ApiHelpers::errorNew($e->getMessage());
+            BotLogHelpers::notifyBotLog('(🔵Proxy): ' . $e->getMessage());
+            \Log::error($e->getMessage());
+            return ApiHelpers::error('Prolong proxy error');
         }
     }
 }
