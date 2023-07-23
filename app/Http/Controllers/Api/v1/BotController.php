@@ -48,8 +48,11 @@ class BotController extends Controller
                 $request->bot_id
             );
             return ApiHelpers::success(BotFactory::fromEntity($bot)->getArray());
+        } catch (\RuntimeException $r) {
+            BotLogHelpers::notifyBotLog('(🔵R ' . __FUNCTION__ . ' Proxy): ' . $r->getMessage());
+            return ApiHelpers::error($r->getMessage());
         } catch (\Exception $e) {
-            BotLogHelpers::notifyBotLog('(🔵Proxy): ' . $e->getMessage());
+            BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
             \Log::error($e->getMessage());
             return ApiHelpers::error('Module creation error');
         }
@@ -68,8 +71,11 @@ class BotController extends Controller
             if (empty($bot))
                 return ApiHelpers::error('Not found module.');
             return ApiHelpers::success(BotFactory::fromEntity($bot)->getArray());
+        } catch (\RuntimeException $r) {
+            BotLogHelpers::notifyBotLog('(🔵R ' . __FUNCTION__ . ' Proxy): ' . $r->getMessage());
+            return ApiHelpers::error($r->getMessage());
         } catch (\Exception $e) {
-            BotLogHelpers::notifyBotLog('(🔵Proxy): ' . $e->getMessage());
+            BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
             \Log::error($e->getMessage());
             return ApiHelpers::error('Module get error');
         }
@@ -87,8 +93,11 @@ class BotController extends Controller
             $bot = $this->botService->update($request->getDto());
             $bot = Bot::query()->where('public_key', $bot->public_key)->where('private_key', $bot->private_key)->first();
             return ApiHelpers::success(BotFactory::fromEntity($bot)->getArray());
+        } catch (\RuntimeException $r) {
+            BotLogHelpers::notifyBotLog('(🔵R ' . __FUNCTION__ . ' Proxy): ' . $r->getMessage());
+            return ApiHelpers::error($r->getMessage());
         } catch (\Exception $e) {
-            BotLogHelpers::notifyBotLog('(🔵Proxy): ' . $e->getMessage());
+            BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
             \Log::error($e->getMessage());
             return ApiHelpers::error('Module update error');
         }
@@ -112,8 +121,11 @@ class BotController extends Controller
             $result = $botDto->color;
 
             return ApiHelpers::success($result);
+        } catch (\RuntimeException $r) {
+            BotLogHelpers::notifyBotLog('(🔵R ' . __FUNCTION__ . ' Proxy): ' . $r->getMessage());
+            return ApiHelpers::error($r->getMessage());
         } catch (\Exception $e) {
-            BotLogHelpers::notifyBotLog('(🔵Proxy): ' . $e->getMessage());
+            BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
             \Log::error($e->getMessage());
             return ApiHelpers::error('Module get settings error');
         }
@@ -130,8 +142,11 @@ class BotController extends Controller
         try {
             $this->botService->delete($request->public_key, $request->private_key);
             return ApiHelpers::success('OK');
+        } catch (\RuntimeException $r) {
+            BotLogHelpers::notifyBotLog('(🔵R ' . __FUNCTION__ . ' Proxy): ' . $r->getMessage());
+            return ApiHelpers::error($r->getMessage());
         } catch (\Exception $e) {
-            BotLogHelpers::notifyBotLog('(🔵Proxy): ' . $e->getMessage());
+            BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
             \Log::error($e->getMessage());
             return ApiHelpers::error('Module delete error');
         }

@@ -46,8 +46,11 @@ class CountryController extends Controller
             $result = $this->countryService->formingCountriesArray($request->version);
 
             return ApiHelpers::success($result);
+        } catch (\RuntimeException $r) {
+            BotLogHelpers::notifyBotLog('(🔵R ' . __FUNCTION__ . ' Proxy): ' . $r->getMessage());
+            return ApiHelpers::error($r->getMessage());
         } catch (\Exception $e) {
-            BotLogHelpers::notifyBotLog('(🔵Proxy): ' . $e->getMessage());
+            BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
             \Log::error($e->getMessage());
             return ApiHelpers::error('Get country error');
         }

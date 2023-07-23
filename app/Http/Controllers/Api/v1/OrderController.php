@@ -72,9 +72,11 @@ class OrderController extends Controller
             where(['bot_id' => $bot->id])->get());
 
             return ApiHelpers::success($result);
-
+        } catch (\RuntimeException $r) {
+            BotLogHelpers::notifyBotLog('(🔵R ' . __FUNCTION__ . ' Proxy): ' . $r->getMessage());
+            return ApiHelpers::error($r->getMessage());
         } catch (Exception $e) {
-            BotLogHelpers::notifyBotLog('(🔵Proxy): ' . $e->getMessage());
+            BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
             \Log::error($e->getMessage());
             return ApiHelpers::error('Orders error');
         }
@@ -182,7 +184,7 @@ class OrderController extends Controller
 
             $order = Order::query()->where(['org_id' => $request->order_id])->first();
             return ApiHelpers::success(OrderResource::generateOrderArray($order));
-        } catch (RuntimeException $e) {
+        } catch (Exception $e) {
             return ApiHelpers::errorNew($e->getMessage());
         }
     }

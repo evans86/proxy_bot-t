@@ -42,8 +42,11 @@ class ProxyController extends Controller
             $result = $this->proxyService->formingProxy($botDto);
 
             return ApiHelpers::success($result);
-        } catch (\RuntimeException $e) {
-            BotLogHelpers::notifyBotLog('(🔵Proxy): ' . $e->getMessage());
+        } catch (\RuntimeException $r) {
+            BotLogHelpers::notifyBotLog('(🔵R ' . __FUNCTION__ . ' Proxy): ' . $r->getMessage());
+            return ApiHelpers::error($r->getMessage());
+        } catch (\Exception $e) {
+            BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
             \Log::error($e->getMessage());
             return ApiHelpers::error('Get proxy error');
         }
@@ -72,8 +75,11 @@ class ProxyController extends Controller
             $result = $this->proxyService->getCount($request->country, $request->version, $botDto);
 
             return ApiHelpers::success($result);
-        } catch (\RuntimeException $e) {
-            BotLogHelpers::notifyBotLog('(🔵Proxy): ' . $e->getMessage());
+        } catch (\RuntimeException $r) {
+            BotLogHelpers::notifyBotLog('(🔵R ' . __FUNCTION__ . ' Proxy): ' . $r->getMessage());
+            return ApiHelpers::error($r->getMessage());
+        } catch (\Exception $e) {
+            BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
             \Log::error($e->getMessage());
             return ApiHelpers::error('Get count error');
         }
@@ -104,8 +110,11 @@ class ProxyController extends Controller
             $result = $this->proxyService->getPrice($request->count, $request->period, $request->version, $botDto);
 
             return ApiHelpers::success($result);
-        } catch (\RuntimeException $e) {
-            BotLogHelpers::notifyBotLog('(🔵Proxy): ' . $e->getMessage());
+        } catch (\RuntimeException $r) {
+            BotLogHelpers::notifyBotLog('(🔵R ' . __FUNCTION__ . ' Proxy): ' . $r->getMessage());
+            return ApiHelpers::error($r->getMessage());
+        } catch (\Exception $e) {
+            BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
             \Log::error($e->getMessage());
             return ApiHelpers::error('Get price error');
         }
@@ -165,8 +174,11 @@ class ProxyController extends Controller
             );
 
             return ApiHelpers::success($response);
-        } catch (\RuntimeException $e) {
-            BotLogHelpers::notifyBotLog('(🔵Proxy): ' . $e->getMessage());
+        } catch (\RuntimeException $r) {
+            BotLogHelpers::notifyBotLog('(🔵R ' . __FUNCTION__ . ' Proxy): ' . $r->getMessage());
+            return ApiHelpers::error($r->getMessage());
+        } catch (\Exception $e) {
+            BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
             \Log::error($e->getMessage());
             return ApiHelpers::error('Buy proxy error');
         }
@@ -206,8 +218,11 @@ class ProxyController extends Controller
                 $result['data']
             );
             return ApiHelpers::success($result);
-        } catch (\RuntimeException $e) {
-            BotLogHelpers::notifyBotLog('(🔵Proxy): ' . $e->getMessage());
+        } catch (\RuntimeException $r) {
+            BotLogHelpers::notifyBotLog('(🔵R ' . __FUNCTION__ . ' Proxy): ' . $r->getMessage());
+            return ApiHelpers::error($r->getMessage());
+        } catch (\Exception $e) {
+            BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
             \Log::error($e->getMessage());
             return ApiHelpers::error('Get orders error');
         }
@@ -250,8 +265,11 @@ class ProxyController extends Controller
                 $botDto
             );
             return ApiHelpers::success($result);
-        } catch (\RuntimeException $e) {
-            BotLogHelpers::notifyBotLog('(🔵Proxy): ' . $e->getMessage());
+        } catch (\RuntimeException $r) {
+            BotLogHelpers::notifyBotLog('(🔵R ' . __FUNCTION__ . ' Proxy): ' . $r->getMessage());
+            return ApiHelpers::error($r->getMessage());
+        } catch (\Exception $e) {
+            BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
             \Log::error($e->getMessage());
             return ApiHelpers::error('Check work error');
         }
@@ -297,8 +315,11 @@ class ProxyController extends Controller
                 $botDto
             );
             return ApiHelpers::success($result);
-        } catch (\RuntimeException $e) {
-            BotLogHelpers::notifyBotLog('(🔵Proxy): ' . $e->getMessage());
+        } catch (\RuntimeException $r) {
+            BotLogHelpers::notifyBotLog('(🔵R ' . __FUNCTION__ . ' Proxy): ' . $r->getMessage());
+            return ApiHelpers::error($r->getMessage());
+        } catch (\Exception $e) {
+            BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
             \Log::error($e->getMessage());
             return ApiHelpers::error('Update type error');
         }
@@ -342,8 +363,11 @@ class ProxyController extends Controller
             );
 
             return ApiHelpers::success($result);
-        } catch (\RuntimeException $e) {
-            BotLogHelpers::notifyBotLog('(🔵Proxy): ' . $e->getMessage());
+        } catch (\RuntimeException $r) {
+            BotLogHelpers::notifyBotLog('(🔵R ' . __FUNCTION__ . ' Proxy): ' . $r->getMessage());
+            return ApiHelpers::error($r->getMessage());
+        } catch (\Exception $e) {
+            BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
             \Log::error($e->getMessage());
             return ApiHelpers::error('Delete proxy error');
         }
@@ -397,8 +421,11 @@ class ProxyController extends Controller
             );
 
             return ApiHelpers::success($result);
-        } catch (\RuntimeException $e) {
-            BotLogHelpers::notifyBotLog('(🔵Proxy): ' . $e->getMessage());
+        } catch (\RuntimeException $r) {
+            BotLogHelpers::notifyBotLog('(🔵R ' . __FUNCTION__ . ' Proxy): ' . $r->getMessage());
+            return ApiHelpers::error($r->getMessage());
+        } catch (\Exception $e) {
+            BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
             \Log::error($e->getMessage());
             return ApiHelpers::error('Prolong proxy error');
         }
