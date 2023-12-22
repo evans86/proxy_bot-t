@@ -11,12 +11,12 @@ class OrderController
      */
     public function index()
     {
-        $orders = Order::orderBy('id', 'DESC')->Paginate(15);
+        $orders = Order::orderBy('id', 'DESC')->limit(1000)->Paginate(15);
 
-        $allCount = count(Order::get());
-        $activeCount = count(Order::query()->where('status_org', Order::ORDER_ACTIVE)->get());
-        $finishCount = count(Order::query()->where('status_org', Order::ORDER_FINISH)->get());
-        $deleteCount = count(Order::query()->where('status_org', Order::ORDER_DELETE)->get());
+        $allCount = Order::count();
+        $activeCount = Order::query()->where('status_org', Order::ORDER_ACTIVE)->count();
+        $finishCount = Order::query()->where('status_org', Order::ORDER_FINISH)->get()->count();
+        $deleteCount = Order::query()->where('status_org', Order::ORDER_DELETE)->get()->count();
 
         return view('activate.order.index', compact(
             'orders',
