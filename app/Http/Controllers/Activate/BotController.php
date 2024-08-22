@@ -22,9 +22,4 @@ class BotController
             'newBots'
         ));
     }
-
-    public function show()
-    {
-        return view('activate.bot.show');
-    }
 }
