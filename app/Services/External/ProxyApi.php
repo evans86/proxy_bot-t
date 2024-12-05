@@ -35,10 +35,10 @@ class ProxyApi
         ];
 
         $client = new Client(['base_uri' => self::HOST]);
-        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
-//        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
-//            'proxy' => 'http://VtZNR9Hb:nXC9nQ45@86.62.52.85:62959'
-//        ]);
+//        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
+        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
+            'proxy' => 'http://VtZNR9Hb:nXC9nQ45@45.147.246.121:64614',
+        ]);
 
         $result = $response->getBody()->getContents();
         return json_decode($result, true);
@@ -53,8 +53,10 @@ class ProxyApi
         ];
 
         $client = new Client(['base_uri' => self::HOST]);
-        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
-
+//        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
+        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
+            'proxy' => 'http://VtZNR9Hb:nXC9nQ45@45.147.246.121:64614',
+        ]);
         $result = $response->getBody()->getContents();
         return json_decode($result, true);
     }
@@ -67,8 +69,10 @@ class ProxyApi
         ];
 
         $client = new Client(['base_uri' => self::HOST]);
-        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
-
+//        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
+        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
+            'proxy' => 'http://VtZNR9Hb:nXC9nQ45@45.147.246.121:64614',
+        ]);
         $result = $response->getBody()->getContents();
         return json_decode($result, true);
     }
@@ -83,8 +87,10 @@ class ProxyApi
         ];
 
         $client = new Client(['base_uri' => self::HOST]);
-        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
-
+//        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
+        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
+            'proxy' => 'http://VtZNR9Hb:nXC9nQ45@45.147.246.121:64614',
+        ]);
         $result = $response->getBody()->getContents();
         return json_decode($result, true);
     }
@@ -98,8 +104,10 @@ class ProxyApi
         ];
 
         $client = new Client(['base_uri' => self::HOST]);
-        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
-
+//        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
+        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
+            'proxy' => 'http://VtZNR9Hb:nXC9nQ45@45.147.246.121:64614',
+        ]);
         $result = $response->getBody()->getContents();
         return json_decode($result, true);
     }
@@ -114,14 +122,16 @@ class ProxyApi
         ];
 
         $client = new Client(['base_uri' => self::HOST]);
-        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
-
+//        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
+        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
+            'proxy' => 'http://VtZNR9Hb:nXC9nQ45@45.147.246.121:64614',
+        ]);
         $result = $response->getBody()->getContents();
         return json_decode($result, true);
     }
 
     //Покупка прокси;
-    public function buy($count, $period, $country, $version = 6, $type = 'http', $descr =null)
+    public function buy($count, $period, $country, $version = 6, $type = 'http', $descr = null)
     {
         $requestParam = [
             'count' => $count,
@@ -133,8 +143,10 @@ class ProxyApi
         ];
 
         $client = new Client(['base_uri' => self::HOST]);
-        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
-
+//        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
+        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
+            'proxy' => 'http://VtZNR9Hb:nXC9nQ45@45.147.246.121:64614',
+        ]);
         $result = $response->getBody()->getContents();
         return json_decode($result, true);
     }
@@ -148,8 +160,10 @@ class ProxyApi
         ];
 
         $client = new Client(['base_uri' => self::HOST]);
-        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
-
+//        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
+        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
+            'proxy' => 'http://VtZNR9Hb:nXC9nQ45@45.147.246.121:64614',
+        ]);
         $result = $response->getBody()->getContents();
         return json_decode($result, true);
     }
@@ -163,8 +177,10 @@ class ProxyApi
         ];
 
         $client = new Client(['base_uri' => self::HOST]);
-        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
-
+//        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
+        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
+            'proxy' => 'http://VtZNR9Hb:nXC9nQ45@45.147.246.121:64614',
+        ]);
         $result = $response->getBody()->getContents();
         return json_decode($result, true);
     }
@@ -177,8 +193,10 @@ class ProxyApi
         ];
 
         $client = new Client(['base_uri' => self::HOST]);
-        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
-
+//        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
+        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
+            'proxy' => 'http://VtZNR9Hb:nXC9nQ45@45.147.246.121:64614',
+        ]);
         $result = $response->getBody()->getContents();
         return json_decode($result, true);
     }
@@ -191,8 +209,10 @@ class ProxyApi
         ];
 
         $client = new Client(['base_uri' => self::HOST]);
-        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
-
+//        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
+        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
+            'proxy' => 'http://VtZNR9Hb:nXC9nQ45@45.147.246.121:64614',
+        ]);
         $result = $response->getBody()->getContents();
         return json_decode($result, true);
     }
