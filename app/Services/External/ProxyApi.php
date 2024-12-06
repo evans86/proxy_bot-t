@@ -143,10 +143,10 @@ class ProxyApi
         ];
 
         $client = new Client(['base_uri' => self::HOST]);
-//        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
-        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
-            'proxy' => 'http://VtZNR9Hb:nXC9nQ45@45.147.246.121:64614',
-        ]);
+        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
+//        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
+//            'proxy' => 'http://VtZNR9Hb:nXC9nQ45@45.147.246.121:64614',
+//        ]);
         $result = $response->getBody()->getContents();
         return json_decode($result, true);
     }
