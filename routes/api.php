@@ -41,7 +41,7 @@ Route::get('getPrice', [ProxyController::class, 'getPrice']);
  * Покупка прокси
  */
 Route::get('buyProxy', [ProxyController::class, 'buyProxy'])->middleware('throttle_user_secret_key');
-Route::get('getOrders', [ProxyController::class, 'getOrders'])->middleware('throttle_user_secret_key');
+Route::get('getOrders', [ProxyController::class, 'getOrders']);
 
 /**
  * Работа с активными заказами
