@@ -40,22 +40,22 @@ Route::get('getPrice', [ProxyController::class, 'getPrice']);
 /**
  * Покупка прокси
  */
-Route::get('buyProxy', [ProxyController::class, 'buyProxy']);
-Route::get('getOrders', [ProxyController::class, 'getOrders']);
+Route::get('buyProxy', [ProxyController::class, 'buyProxy'])->middleware('throttle_user_secret_key');
+Route::get('getOrders', [ProxyController::class, 'getOrders'])->middleware('throttle_user_secret_key');
 
 /**
  * Работа с активными заказами
  */
-Route::get('checkWork', [ProxyController::class, 'checkWork']);
-Route::get('updateType', [ProxyController::class, 'updateType']);
-Route::get('deleteProxy', [ProxyController::class, 'deleteProxy']);
-Route::get('prolongProxy', [ProxyController::class, 'prolongProxy']);
+Route::get('checkWork', [ProxyController::class, 'checkWork'])->middleware('throttle_user_secret_key');
+Route::get('updateType', [ProxyController::class, 'updateType'])->middleware('throttle_user_secret_key');
+Route::get('deleteProxy', [ProxyController::class, 'deleteProxy'])->middleware('throttle_user_secret_key');
+Route::get('prolongProxy', [ProxyController::class, 'prolongProxy'])->middleware('throttle_user_secret_key');
 
 
 /**
  * Роуты API (пользователи)
  */
-Route::get('setLanguage', [UserController::class, 'setLanguage']);
+Route::get('setLanguage', [UserController::class, 'setLanguage'])->middleware('throttle_user_secret_key');
 Route::get('getUser', [UserController::class, 'getUser']);
 
 /**
