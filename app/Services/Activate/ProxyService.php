@@ -55,7 +55,9 @@ class ProxyService extends MainService
 
         switch ($order['currency']) {
             case 'USD':
-                $price = Currency::convert()->from('USD')->to('RUB')->amount($order['price'])->get();
+                $apiRate = self::formingRublePrice();
+                $price = round(($apiRate * $order['price']), 2);
+//                $price = Currency::convert()->from('USD')->to('RUB')->amount($order['price'])->get();
                 $amountStart = intval(floatval($price) * 100);
                 $amountFinal = $amountStart + $amountStart * $botDto->percent / 100;
                 break;
@@ -156,7 +158,9 @@ class ProxyService extends MainService
 
             switch ($order['currency']) {
                 case 'USD':
-                    $price = Currency::convert()->from('USD')->to('RUB')->amount($order['price'])->get();
+                    $apiRate = self::formingRublePrice();
+                    $price = round(($apiRate * $order['price']), 2);
+//                    $price = Currency::convert()->from('USD')->to('RUB')->amount($order['price'])->get();
                     $amountStart = intval(floatval($price) * 100);
                     $amountFinal = $amountStart + $amountStart * $botDto->percent / 100;
                     break;
