@@ -3,6 +3,7 @@
 namespace App\Services\Activate;
 
 use App\Dto\BotDto;
+use App\Helpers\BotLogHelpers;
 use App\Models\Country\Country;
 use App\Models\Order\Order;
 use App\Models\Proxy\Proxy;
@@ -336,6 +337,8 @@ class ProxyService extends MainService
         $proxyApi = new ProxyApi($botDto->api_key);
 
         $price_result = $proxyApi->getprice($count, $period, $version);
+
+        BotLogHelpers::notifyBotLog('(🔵R ' . __FUNCTION__ . ' Proxy currency): ' . $price_result['currency']);
 
         switch ($price_result['currency']) {
             case 'USD':
