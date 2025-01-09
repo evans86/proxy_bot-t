@@ -342,7 +342,9 @@ class ProxyService extends MainService
 
         switch ($price_result['currency']) {
             case 'USD':
-                $price = Currency::convert()->from('USD')->to('RUB')->amount($price_result['price'])->get();
+                $apiRate = self::formingRublePrice();
+                $price = round(($apiRate * $price_result['price']), 2);
+//                $price = Currency::convert()->from('USD')->to('RUB')->amount($price_result['price'])->get();
                 $amountStart = intval(floatval($price) * 100);
                 $amountFinal = $amountStart + $amountStart * $botDto->percent / 100;
                 break;
@@ -362,6 +364,21 @@ class ProxyService extends MainService
         ];
 
         return $result;
+    }
+
+    public static function formingRublePrice(): float
+    {
+        $url = 'https://www.cbr.ru/scripts/XML_daily.asp';
+        $xml = simplexml_load_file($url);
+        $json = json_encode($xml);
+        $currencies = json_decode($json, TRUE);
+        $apiRate = '';
+        foreach ($currencies['Valute'] as $key => $currency) {
+            if ($currency['CharCode'] == 'USD')
+                $apiRate = $currency['Value'];
+        }
+        $apiRate = str_replace(",", ".", $apiRate);
+        return $apiRate;
     }
 
     /**
