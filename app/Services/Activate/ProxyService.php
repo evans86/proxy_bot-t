@@ -338,7 +338,7 @@ class ProxyService extends MainService
 
         $price_result = $proxyApi->getprice($count, $period, $version);
 
-        BotLogHelpers::notifyBotLog('(🔵R ' . __FUNCTION__ . ' Proxy currency): ' . $price_result['currency']);
+//        BotLogHelpers::notifyBotLog('(🔵R ' . __FUNCTION__ . ' Proxy currency): ' . $price_result['currency']);
 
         switch ($price_result['currency']) {
             case 'USD':
