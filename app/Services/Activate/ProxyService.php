@@ -14,6 +14,7 @@ use App\Services\MainService;
 use AmrShawky\LaravelCurrency\Facade\Currency;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
+use Log;
 
 class ProxyService extends MainService
 {
@@ -69,7 +70,7 @@ class ProxyService extends MainService
 
         }
 
-        $resultBalance = BottApi::subtractBalance($botDto, $userData, $amountFinal, 'Списание баланса для прокси ');
+        $resultBalance = BottApi::subtractBalance($botDto, $userData, $amountFinal, 'Списание баланса для прокси ' . $proxy->id);
 
         $resultOrder = BottApi::createOrder($botDto, $userData, $amountFinal, 'Покупка прокси ');
 
@@ -101,6 +102,7 @@ class ProxyService extends MainService
 
             $order = Order::create($data);
             $order->save();
+            Log::info('Proxy: Произошло создание заказа (списание баланса) ' . $order->id);
 
             array_push($response, [
                 'order_org_id' => $order->prolong_org_id,
