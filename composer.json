@@ -13,7 +13,10 @@
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "symfony/routing": "5.4.*",
+        "symfony/event-dispatcher": "5.4.*",
         "laravel/ui": "^3.4",
+        "brick/math": "0.9.*",
         "league/iso3166": "^4.2",
         "nesbot/carbon": "^2.66"
     },
