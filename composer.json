@@ -9,7 +9,7 @@
         "amrshawky/laravel-currency": "^6.0",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
-        "laravel-frontend-presets/black-dashboard": "^1.0.7",
+        "laravel-frontend-presets/black-dashboard": "1.0.6",
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
