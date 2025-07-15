@@ -395,16 +395,17 @@ class ProxyService extends MainService
     {
         $proxyApi = new ProxyApi($botDto->api_key);
 
-//        $proxies = \Cache::get('proxies');
-//        if($proxies === null){
+        $proxies = \Cache::get('proxies');
+        if($proxies === null){
             $proxies = Proxy::all();
-//            \Cache::put('proxies', $proxies, 900);
-//        }
+            \Cache::put('proxies', $proxies, 900);
+        }
 
         $result = [];
         foreach ($proxies as $key => $proxy) {
 
             $countries = $proxyApi->getcountry($proxy->version);
+            BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $countries);
             $countries = $countries['list'];
 
             $countriesArr = [];
