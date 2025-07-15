@@ -405,9 +405,8 @@ class ProxyService extends MainService
         foreach ($proxies as $key => $proxy) {
 
             $countries = $proxyApi->getcountry($proxy->version);
-
             $countries = $countries['list'];
-            BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $countries['list']);
+            BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . serialize($countries));
 
             $countriesArr = [];
             foreach ($countries as $country) {
