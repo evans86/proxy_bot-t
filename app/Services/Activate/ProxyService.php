@@ -46,6 +46,42 @@ class ProxyService extends MainService
 
         $order = $proxyApi->buy($count, $period, $country, $version, $type);
 
+        // 🔵 ДЕТАЛЬНАЯ ПРОВЕРКА И ЛОГИРОВАНИЕ ОТВЕТА API
+        if (!isset($order['list']) || empty($order['list'])) {
+            // Логируем полный ответ API для диагностики
+            $logContext = [
+                'method' => 'createOrder',
+                'api_response' => $order,
+                'request_params' => [
+                    'count' => $count,
+                    'period' => $period,
+                    'country' => $country,
+                    'version' => $version,
+                    'type' => $type,
+                    'user_id' => $userData['user']['telegram_id']
+                ],
+                'bot_id' => $botDto->id
+            ];
+
+            BotLogHelpers::notifyBotLog(
+                '(🔵E Proxy API Missing List): ' .
+                'От API поставщика получен ответ без списка прокси. ' .
+                'Детали: ' . json_encode($logContext)
+            );
+
+            // Понятное сообщение для пользователя
+            $userMessage = 'Ошибка создания заказа';
+            if (isset($order['error'])) {
+                $userMessage .= '. Причина: ' . $order['error'];
+            } elseif (isset($order['status']) && $order['status'] === 'no') {
+                $userMessage .= ' - сервис временно недоступен';
+            } else {
+                $userMessage .= ' - отсутствуют данные прокси';
+            }
+
+            throw new \RuntimeException($userMessage);
+        }
+
         $lists = $order['list'];
 
         $country = Country::query()->where(['iso_two' => $order['country']])->first();
