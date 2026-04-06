@@ -22,6 +22,7 @@ class BotFactory
         $dto->percent = $bot->percent;
         $dto->version = $bot->version;
         $dto->color = $bot->color;
+        $dto->mtproto = (int) ($bot->mtproto ?? 0);
         $dto->resource_link = $bot->resource_link;
         return $dto;
     }

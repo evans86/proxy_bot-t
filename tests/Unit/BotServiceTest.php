@@ -26,5 +26,6 @@ class BotServiceTest extends \Tests\TestCase
         self::assertEquals($bot->private_key, $private_key);
         self::assertEquals($bot->bot_id, $bot_id);
         self::assertEquals($bot->resource_link, BotService::DEFAULT_HOST);
+        self::assertEquals(0, $bot->mtproto);
     }
 }

@@ -13,6 +13,7 @@ class BotDto
     public int    $percent;
     public int    $version;
     public int    $color;
+    public int    $mtproto;
     public string $resource_link;
 
     public function getArray(): array
@@ -27,6 +28,7 @@ class BotDto
             'percent' => $this->percent,
             'version' => $this->version,
             'color' => $this->color,
+            'mtproto' => $this->mtproto,
 //            'resource_link' => $this->resource_link,
          ];
     }

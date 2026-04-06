@@ -3,7 +3,6 @@
 namespace App\Services\Activate;
 
 use App\Dto\BotDto;
-use App\Helpers\ApiHelpers;
 use App\Models\Bot\Bot;
 use App\Services\MainService;
 
@@ -30,6 +29,7 @@ class BotService extends MainService
         $bot->percent = 5;
         $bot->version = 1;
         $bot->color = 1;
+        $bot->mtproto = 0;
         $bot->resource_link = self::DEFAULT_HOST;
         if(!$bot->save())
             throw new \RuntimeException('bot dont save');
@@ -45,12 +45,14 @@ class BotService extends MainService
     public function update(BotDto $dto): Bot
     {
         $bot = Bot::query()->where('public_key', $dto->public_key)->where('private_key', $dto->private_key)->first();
-        if (empty($bot))
-            return ApiHelpers::error('Not found module.');
+        if (!$bot instanceof Bot) {
+            throw new \RuntimeException('Not found module.');
+        }
         $bot->version = $dto->version;
         $bot->percent = $dto->percent;
         $bot->api_key = $dto->api_key;
         $bot->color = $dto->color;
+        $bot->mtproto = $dto->mtproto;
         $bot->category_id = $dto->category_id;
         $bot->resource_link = $dto->resource_link;
         if (!$bot->save())
