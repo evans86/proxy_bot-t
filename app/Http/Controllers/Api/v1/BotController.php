@@ -118,9 +118,10 @@ class BotController extends Controller
 
             $botDto = BotFactory::fromEntity($bot);
 
-            $result = $botDto->color;
-
-            return ApiHelpers::success($result);
+            return ApiHelpers::success([
+                'color' => $botDto->color,
+                'mtproto' => $botDto->mtproto,
+            ]);
         } catch (\RuntimeException $r) {
             BotLogHelpers::notifyBotLog('(🔵R ' . __FUNCTION__ . ' Proxy): ' . $r->getMessage());
             return ApiHelpers::error($r->getMessage());
