@@ -9,7 +9,8 @@
                 <div class="card-header">
                     <img src="{{ asset('black') }}/img/card-primary.png" alt="">
                     <h1 class="card-title">{{ __('Proxy') }}</h1>
-                    <p class="description text-center">{{ __('Учётные данные из .env (не из БД)') }}</p>
+                    <p class="description text-center">{{ __('Шаг 2: логин и пароль из .env (ADMIN_USERNAME / ADMIN_PASSWORD*)') }}</p>
+                    <p class="description text-center small text-muted">{{ __('Сначала войдите по БД на странице /login') }}</p>
                 </div>
                 <div class="card-body">
                     <div class="input-group{{ $errors->has('username') ? ' has-danger' : '' }}">

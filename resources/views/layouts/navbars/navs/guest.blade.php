@@ -10,18 +10,34 @@
             </div>
             <a class="navbar-brand" href="#">{{ $page ?? '' }}</a>
         </div>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
             <span class="navbar-toggler-bar navbar-kebab"></span>
             <span class="navbar-toggler-bar navbar-kebab"></span>
             <span class="navbar-toggler-bar navbar-kebab"></span>
         </button>
         <div class="collapse navbar-collapse" id="navigation">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item ">
-                    <a href="{{ route('admin.login') }}" class="nav-link">
-                        <i class="tim-icons icon-single-02"></i> {{ __('Вход') }}
-                    </a>
-                </li>
+                @guest
+                    <li class="nav-item">
+                        <a href="{{ route('login') }}" class="nav-link">
+                            <i class="tim-icons icon-single-02"></i> {{ __('Вход (БД)') }}
+                        </a>
+                    </li>
+                @else
+                    @unless(session(config('admin.session_key')))
+                        <li class="nav-item">
+                            <a href="{{ route('admin.login') }}" class="nav-link">
+                                <i class="tim-icons icon-lock-circle"></i> {{ __('Доступ панели (.env)') }}
+                            </a>
+                        </li>
+                    @endunless
+                    <li class="nav-item">
+                        <form method="post" action="{{ route('logout') }}" class="nav-link p-0 border-0 bg-transparent">
+                            @csrf
+                            <button type="submit" class="btn btn-link nav-link text-left m-0">{{ __('Выход из аккаунта') }}</button>
+                        </form>
+                    </li>
+                @endguest
             </ul>
         </div>
     </div>

@@ -19,10 +19,6 @@ class RedirectIfAuthenticated
      */
     public function handle(Request $request, Closure $next, ...$guards)
     {
-        if ($request->session()->get(config('admin.session_key'), false)) {
-            return redirect(RouteServiceProvider::HOME);
-        }
-
         $guards = empty($guards) ? [null] : $guards;
 
         foreach ($guards as $guard) {

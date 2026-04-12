@@ -23,7 +23,7 @@
                             <img src="{{ asset('black') }}/img/anime3.png" alt="{{ __('Profile Photo') }}">
                         </div>
                         <b class="caret d-none d-lg-block d-xl-block"></b>
-                        <p class="d-lg-none">{{ __('Выход') }}</p>
+                        <p class="d-lg-none">{{ Auth::user()->username ?? Auth::user()->name }}</p>
                     </a>
                     <ul class="dropdown-menu dropdown-navbar">
                         <li class="nav-link">
@@ -32,7 +32,13 @@
                         <li class="nav-link">
                             <form method="post" action="{{ route('admin.logout') }}" class="px-3 py-1">
                                 @csrf
-                                <button type="submit" class="btn btn-sm btn-outline-danger btn-block">{{ __('Выход') }}</button>
+                                <button type="submit" class="btn btn-sm btn-outline-warning btn-block">{{ __('Сброс доступа .env') }}</button>
+                            </form>
+                        </li>
+                        <li class="nav-link">
+                            <form method="post" action="{{ route('logout') }}" class="px-3 py-1">
+                                @csrf
+                                <button type="submit" class="btn btn-sm btn-outline-danger btn-block">{{ __('Выход из аккаунта') }}</button>
                             </form>
                         </li>
                     </ul>

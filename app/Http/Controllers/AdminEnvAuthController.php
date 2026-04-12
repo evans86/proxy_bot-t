@@ -8,11 +8,6 @@ use Illuminate\View\View;
 
 class AdminEnvAuthController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('guest')->only(['showLoginForm', 'login']);
-    }
-
     public function showLoginForm(): View
     {
         return view('auth.admin-login');
@@ -43,7 +38,6 @@ class AdminEnvAuthController extends Controller
     public function logout(Request $request): RedirectResponse
     {
         $request->session()->forget(config('admin.session_key'));
-        $request->session()->invalidate();
         $request->session()->regenerateToken();
 
         return redirect()->route('admin.login');
