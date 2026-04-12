@@ -20,8 +20,9 @@ class AdminEnvAuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        $expectedUser = (string) (config('admin.username') ?? '');
-        if ($expectedUser === '' || ! hash_equals($expectedUser, (string) $request->input('username'))) {
+        $expectedUser = trim((string) (config('admin.username') ?? ''));
+        $givenUser = trim((string) $request->input('username'));
+        if ($expectedUser === '' || ! hash_equals($expectedUser, $givenUser)) {
             return $this->failedLogin($request);
         }
 
@@ -51,11 +52,21 @@ class AdminEnvAuthController extends Controller
         }
 
         $plain = config('admin.password_plain');
-        if (is_string($plain) && $plain !== '') {
-            return hash_equals($plain, $password);
+        if (! is_string($plain) || $plain === '') {
+            return false;
         }
 
-        return false;
+        // Частая ошибка: bcrypt-хеш положили в ADMIN_PASSWORD — раньше шло сравнение как с открытым текстом.
+        if ($this->looksLikeBcryptHash($plain)) {
+            return password_verify($password, $plain);
+        }
+
+        return hash_equals($plain, $password);
+    }
+
+    private function looksLikeBcryptHash(string $value): bool
+    {
+        return preg_match('/^\$2[aby]\$\d{2}\$[.\/A-Za-z0-9]{53}$/', $value) === 1;
     }
 
     private function failedLogin(Request $request): RedirectResponse
