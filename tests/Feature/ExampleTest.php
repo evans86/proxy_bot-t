@@ -16,8 +16,18 @@ class ExampleTest extends TestCase
     {
         $response = $this->get('/');
 
-//        $response->dumpSession();
+        $response->assertRedirect(route('admin.login'));
+    }
 
-        $response->assertStatus(302);
+    public function test_home_after_admin_login()
+    {
+        $this->get(route('admin.login'));
+        $response = $this->post(route('admin.login.store'), [
+            'username' => 'testadmin',
+            'password' => 'secret',
+        ]);
+
+        $response->assertRedirect(route('home'));
+        $this->get('/')->assertStatus(200);
     }
 }

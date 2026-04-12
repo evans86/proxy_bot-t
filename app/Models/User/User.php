@@ -12,6 +12,10 @@ class User extends Model
 
     use HasFactory;
 
-    protected $guarded = false;
     protected $table = 'user';
+
+    protected $fillable = [
+        'telegram_id',
+        'language',
+    ];
 }

@@ -168,4 +168,61 @@ class BotTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function testRotatePrivateKey(): void
+    {
+        $this->get('/create?' . http_build_query([
+            'bot_id' => 1234,
+            'public_key' => 'Public1',
+            'private_key' => 'Private1',
+        ]))->assertStatus(200);
+
+        $this->post('/rotatePrivateKey', [])->assertStatus(422);
+
+        $this->post('/rotatePrivateKey', [
+            'public_key' => 'Public1',
+            'private_key' => 'Private1',
+            'new_private_key' => 'Private1',
+        ])->assertStatus(422);
+
+        $this->get('/create?' . http_build_query([
+            'bot_id' => 5678,
+            'public_key' => 'Public2',
+            'private_key' => 'Private2',
+        ]))->assertStatus(200);
+
+        $this->post('/rotatePrivateKey', [
+            'public_key' => 'Public1',
+            'private_key' => 'Private1',
+            'new_private_key' => 'Private2',
+        ])->assertStatus(422);
+
+        $response = $this->post('/rotatePrivateKey', [
+            'public_key' => 'Public1',
+            'private_key' => 'Private1',
+            'new_private_key' => 'Private1New',
+        ]);
+        $response->assertStatus(200);
+        $response->assertJsonPath('result', true);
+        $response->assertJsonPath('data.private_key', 'Private1New');
+        $response->assertJsonPath('data.public_key', 'Public1');
+
+        $this->get('/get?' . http_build_query([
+            'public_key' => 'Public1',
+            'private_key' => 'Private1New',
+        ]))->assertStatus(200);
+
+        $oldKeyGet = $this->get('/get?' . http_build_query([
+            'public_key' => 'Public1',
+            'private_key' => 'Private1',
+        ]));
+        $this->assertStringContainsString('Not found module', $oldKeyGet->getContent());
+
+        $wrongRotate = $this->post('/rotatePrivateKey', [
+            'public_key' => 'Public1',
+            'private_key' => 'wrong',
+            'new_private_key' => 'AnotherNew',
+        ]);
+        $this->assertStringContainsString('Not found module', $wrongRotate->getContent());
+    }
 }

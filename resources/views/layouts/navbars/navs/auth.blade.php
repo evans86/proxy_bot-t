@@ -27,7 +27,13 @@
                     </a>
                     <ul class="dropdown-menu dropdown-navbar">
                         <li class="nav-link">
-                            <a href="{{ route('logout') }}" class="nav-item dropdown-item" onclick="event.preventDefault();  document.getElementById('logout-form').submit();">{{ __('Выход') }}</a>
+                            <span class="dropdown-item text-muted small">{{ $admin_username ?? __('Панель') }}</span>
+                        </li>
+                        <li class="nav-link">
+                            <form method="post" action="{{ route('admin.logout') }}" class="px-3 py-1">
+                                @csrf
+                                <button type="submit" class="btn btn-sm btn-outline-danger btn-block">{{ __('Выход') }}</button>
+                            </form>
                         </li>
                     </ul>
                 </li>

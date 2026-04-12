@@ -18,8 +18,8 @@
         <div class="collapse navbar-collapse" id="navigation">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item ">
-                    <a href="{{ route('login') }}" class="nav-link">
-                        <i class="tim-icons icon-single-02"></i> {{ __('Login') }}
+                    <a href="{{ route('admin.login') }}" class="nav-link">
+                        <i class="tim-icons icon-single-02"></i> {{ __('Вход') }}
                     </a>
                 </li>
             </ul>

@@ -8,6 +8,7 @@ use App\Helpers\BotLogHelpers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Bot\BotCreateRequest;
 use App\Http\Requests\Bot\BotGetRequest;
+use App\Http\Requests\Bot\BotRotatePrivateKeyRequest;
 use App\Http\Requests\Bot\BotUpdateRequest;
 use App\Models\Bot\Bot;
 use App\Services\Activate\BotService;
@@ -104,17 +105,53 @@ class BotController extends Controller
     }
 
     /**
+     * Смена приватного ключа (тело POST, без ключей только в query).
+     *
+     * @return array|string
+     */
+    public function rotatePrivateKey(BotRotatePrivateKeyRequest $request)
+    {
+        try {
+            $bot = $this->botService->rotatePrivateKey(
+                $request->public_key,
+                $request->private_key,
+                $request->new_private_key
+            );
+            $bot = Bot::query()->where('public_key', $bot->public_key)->where('private_key', $bot->private_key)->first();
+
+            return ApiHelpers::success(BotFactory::fromEntity($bot)->getArray());
+        } catch (\RuntimeException $r) {
+            BotLogHelpers::notifyBotLog('(🔵R ' . __FUNCTION__ . ' Proxy): ' . $r->getMessage());
+
+            return ApiHelpers::error($r->getMessage());
+        } catch (\Exception $e) {
+            BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
+            \Log::error($e->getMessage());
+
+            return ApiHelpers::error('Module rotate private key error');
+        }
+    }
+
+    /**
      * @param Request $request
      * @return array|string
      */
     public function getSettings(Request $request)
     {
         try {
-            if (is_null($request->public_key))
+            if (is_null($request->public_key)) {
                 return ApiHelpers::error('Not found params: public_key');
-            $bot = Bot::query()->where('public_key', $request->public_key)->first();
-            if (empty($bot))
+            }
+            if (is_null($request->private_key)) {
+                return ApiHelpers::error('Not found params: private_key');
+            }
+            $bot = Bot::query()
+                ->where('public_key', $request->public_key)
+                ->where('private_key', $request->private_key)
+                ->first();
+            if (empty($bot)) {
                 throw new \RuntimeException('Not found module.');
+            }
 
             $botDto = BotFactory::fromEntity($bot);
 

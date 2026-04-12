@@ -30,31 +30,24 @@
 
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
+                        @if (! session(config('admin.session_key')))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.login') }}">{{ __('Вход') }}</a>
+                            </li>
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
+                                    {{ $admin_username ?? config('admin.username') }}
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    <form id="logout-form-main" action="{{ route('admin.logout') }}" method="POST" class="px-3 py-2">
                                         @csrf
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary">{{ __('Выход') }}</button>
                                     </form>
                                 </div>
                             </li>
-                        @endguest
+                        @endif
 
                         <a class="nav-link" href="{{ route('activate.countries.index') }}">Список стран</a>
                         <a class="nav-link" href="{{ route('users.index') }}">Пользователи</a>
