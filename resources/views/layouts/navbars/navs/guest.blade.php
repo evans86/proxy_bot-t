@@ -17,27 +17,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navigation">
             <ul class="navbar-nav ml-auto">
-                @guest
-                    <li class="nav-item">
-                        <a href="{{ route('login') }}" class="nav-link">
-                            <i class="tim-icons icon-single-02"></i> {{ __('Вход (БД)') }}
-                        </a>
-                    </li>
-                @else
-                    @unless(session(config('admin.session_key')))
-                        <li class="nav-item">
-                            <a href="{{ route('admin.login') }}" class="nav-link">
-                                <i class="tim-icons icon-lock-circle"></i> {{ __('Доступ панели (.env)') }}
-                            </a>
-                        </li>
-                    @endunless
-                    <li class="nav-item">
-                        <form method="post" action="{{ route('logout') }}" class="nav-link p-0 border-0 bg-transparent">
-                            @csrf
-                            <button type="submit" class="btn btn-link nav-link text-left m-0">{{ __('Выход из аккаунта') }}</button>
-                        </form>
-                    </li>
-                @endguest
+                <li class="nav-item">
+                    <a href="{{ route('login') }}" class="nav-link">
+                        <i class="tim-icons icon-single-02"></i> {{ __('Вход') }}
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

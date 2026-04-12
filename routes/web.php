@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AdminEnvAuthController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -8,22 +7,13 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-| 1) /login — Laravel Auth (таблица users), Auth::routes
-| 2) /admin/login — только для уже вошедших по БД: логин/пароль из .env
-| Панель: middleware auth + admin.env
+| Периметр: HTTP Basic из .env (middleware web, см. Kernel).
+| Далее: /login (таблица users), панель — только middleware auth.
 */
 
 Auth::routes(['register' => false, 'reset' => false, 'verify' => false]);
 
-Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
-    Route::get('login', [AdminEnvAuthController::class, 'showLoginForm'])->name('login')->middleware('admin.env.guest');
-    Route::post('login', [AdminEnvAuthController::class, 'login'])
-        ->name('login.store')
-        ->middleware(['admin.env.guest', 'throttle:10,1']);
-    Route::post('logout', [AdminEnvAuthController::class, 'logout'])->name('logout')->middleware('admin.env');
-});
-
-Route::middleware(['auth', 'admin.env', 'throttle:120,1'])->group(function () {
+Route::middleware(['auth', 'throttle:120,1'])->group(function () {
 
     Route::group(['namespace' => 'Activate', 'prefix' => 'activate'], function () {
         Route::get('countries', 'CountryController@index')->name('activate.countries.index');

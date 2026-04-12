@@ -1,5 +1,7 @@
-@if($admin_panel ?? false)
+@auth()
     @include('layouts.navbars.navs.auth')
-@else
+@endauth
+
+@guest()
     @include('layouts.navbars.navs.guest')
-@endif
+@endguest

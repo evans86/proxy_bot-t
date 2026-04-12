@@ -31,20 +31,11 @@
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
                         @guest
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('Вход (БД)') }}</a>
+                            <a class="nav-link" href="{{ route('login') }}">{{ __('Вход') }}</a>
                         @else
-                            @unless(session(config('admin.session_key')))
-                                <a class="nav-link" href="{{ route('admin.login') }}">{{ __('Доступ панели (.env)') }}</a>
-                            @endunless
-                            @if(session(config('admin.session_key')))
-                                <form action="{{ route('admin.logout') }}" method="POST" class="d-inline">
-                                    @csrf
-                                    <button type="submit" class="btn btn-link nav-link">{{ __('Сброс доступа .env') }}</button>
-                                </form>
-                            @endif
                             <form action="{{ route('logout') }}" method="POST" class="d-inline">
                                 @csrf
-                                <button type="submit" class="btn btn-link nav-link">{{ __('Выход из аккаунта') }}</button>
+                                <button type="submit" class="btn btn-link nav-link">{{ __('Выход') }}</button>
                             </form>
                         @endguest
 

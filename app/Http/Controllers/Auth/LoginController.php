@@ -48,13 +48,8 @@ class LoginController extends Controller
         return 'username';
     }
 
-    /**
-     * Полный выход из аккаунта БД: сбрасываем флаг .env, затем стандартный logout Laravel.
-     */
     public function logout(Request $request)
     {
-        $request->session()->forget(config('admin.session_key'));
-
         $this->guard()->logout();
 
         $request->session()->invalidate();

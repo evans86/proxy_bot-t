@@ -21,7 +21,7 @@
     <link href="{{ asset('black') }}/css/theme.css" rel="stylesheet"/>
 </head>
 <body class="{{ $class ?? '' }}">
-@if($admin_panel ?? false)
+@auth()
     <div class="wrapper">
 
         @include('layouts.navbars.sidebar')
@@ -49,17 +49,12 @@
             @include('layouts.footer')
         </div>
     </div>
-@endif
+@endauth
 <script src="{{ asset('black') }}/js/core/jquery.min.js"></script>
 <script src="{{ asset('black') }}/js/core/popper.min.js"></script>
 <script src="{{ asset('black') }}/js/core/bootstrap.min.js"></script>
 <script src="{{ asset('black') }}/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-<!--  Google Maps Plugin    -->
-<!-- Place this tag in your head or just before your close body tag. -->
 {{-- <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script> --}}
-<!-- Chart JS -->
-{{-- <script src="{{ asset('black') }}/js/plugins/chartjs.min.js"></script> --}}
-<!--  Notifications Plugin    -->
 <script src="{{ asset('black') }}/js/plugins/bootstrap-notify.js"></script>
 
 <script src="{{ asset('black') }}/js/black-dashboard.min.js?v=1.0.0"></script>
@@ -74,7 +69,7 @@
             $navbar = $('.navbar');
             $main_panel = $('.main-panel');
 
-            $full_page = $('.full-page');
+            $full_page = $('.wrapper-full-page');
 
             $sidebar_responsive = $('body > .navbar-collapse');
             sidebar_mini_active = true;
@@ -130,12 +125,10 @@
                     blackDashboard.showSidebarMessage('Sidebar mini activated...');
                 }
 
-                // we simulate the window Resize so the charts will get updated in realtime.
                 var simulateWindowResize = setInterval(function () {
                     window.dispatchEvent(new Event('resize'));
-                }, 180);
+                }, 100);
 
-                // we stop the simulation of Window Resize after the animations are completed
                 setTimeout(function () {
                     clearInterval(simulateWindowResize);
                 }, 1000);
@@ -167,7 +160,9 @@
 <script src="{{ asset('black') }}/js/plugins/chartjs.min.js"></script>
 <script>
     $(document).ready(function () {
-        demo.initDashboardPageCharts();
+        if (typeof demo !== 'undefined' && demo.initDashboardPageCharts) {
+            demo.initDashboardPageCharts();
+        }
     });
 </script>
 @stack('js')

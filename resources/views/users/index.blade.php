@@ -206,16 +206,7 @@
                                                 </li>
                                                 <li class="dropdown-divider"></li>
                                                 <li class="nav-link">
-                                                    <form action="{{ route('admin.logout') }}" method="POST" class="mb-0">
-                                                        @csrf
-                                                        <button type="submit" class="dropdown-item">{{ __('Сброс доступа .env') }}</button>
-                                                    </form>
-                                                </li>
-                                                <li class="nav-link">
-                                                    <form action="{{ route('logout') }}" method="POST" class="mb-0">
-                                                        @csrf
-                                                        <button type="submit" class="dropdown-item">{{ __('Выход из аккаунта') }}</button>
-                                                    </form>
+                                                    <a href="{{ route('logout') }}" class="nav-item dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Выход') }}</a>
                                                 </li>
                                             </ul>
                                         </li>
@@ -344,6 +335,9 @@
 </footer>
             </div>
         </div>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
             <div class="fixed-plugin">
         <div class="dropdown show-dropdown">
             <a href="#" data-toggle="dropdown">
