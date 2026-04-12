@@ -17,16 +17,18 @@ class ApiHelpers
     }
 
     /**
-     * @param string $message
-     * @return string
+     * Ошибка API в том же «каркасе», что и успех: всегда есть ключ data (пустой массив),
+     * чтобы клиенты вроде Bot-t после json_decode могли безопасно ожидать массив в data.
+     *
+     * @return array{result: bool, message: string, data: array}
      */
-    public static function error(string $message): string
+    public static function error(string $message): array
     {
-        $result = [
+        return [
             'result' => false,
-            'message' => $message
+            'message' => $message,
+            'data' => [],
         ];
-        return json_encode($result);
     }
 
     /**
@@ -42,14 +44,14 @@ class ApiHelpers
     }
 
     /**
-     * @param string $message
-     * @return array
+     * @return array{result: bool, message: string, data: array}
      */
     public static function errorNew(string $message): array
     {
         return [
             'result' => false,
-            'message' => $message
+            'message' => $message,
+            'data' => [],
         ];
     }
 
