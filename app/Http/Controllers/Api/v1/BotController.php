@@ -105,7 +105,7 @@ class BotController extends Controller
     }
 
     /**
-     * Смена приватного ключа (тело POST, без ключей только в query).
+     * Смена приватного ключа. Поддерживаются GET (query) и POST (form / JSON), как у остальных методов модуля.
      *
      * @return array|string
      */

@@ -207,6 +207,20 @@ class BotTest extends TestCase
         $response->assertJsonPath('data.private_key', 'Private1New');
         $response->assertJsonPath('data.public_key', 'Public1');
 
+        $this->get('/create?' . http_build_query([
+            'bot_id' => 9999,
+            'public_key' => 'Public9',
+            'private_key' => 'Priv9',
+        ]))->assertStatus(200);
+
+        $getRotate = $this->get('/rotatePrivateKey?' . http_build_query([
+            'public_key' => 'Public9',
+            'private_key' => 'Priv9',
+            'new_private_key' => 'Priv9New',
+        ]));
+        $getRotate->assertStatus(200);
+        $getRotate->assertJsonPath('data.private_key', 'Priv9New');
+
         $this->get('/get?' . http_build_query([
             'public_key' => 'Public1',
             'private_key' => 'Private1New',
