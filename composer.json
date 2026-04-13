@@ -20,7 +20,8 @@
         "league/iso3166": "^4.2",
         "nesbot/carbon": "^2.66",
         "ext-curl": "*",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-simplexml": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.7",

@@ -84,7 +84,14 @@ class AdminBasicAuthTelegramNotifier
         }
 
         try {
-            $client = new Client(['timeout' => 15, 'connect_timeout' => 10]);
+            // Сервер без IPv6: иначе cURL выбирает AAAA api.telegram.org и падает с "Network is unreachable"
+            $client = new Client([
+                'timeout' => 15,
+                'connect_timeout' => 10,
+                'curl' => [
+                    \CURLOPT_IPRESOLVE => \CURL_IPRESOLVE_V4,
+                ],
+            ]);
             $response = $client->post("https://api.telegram.org/bot{$token}/sendMessage", [
                 'http_errors' => false,
                 'json' => [

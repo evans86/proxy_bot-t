@@ -42,7 +42,13 @@ class AdminTelegramTestCommand extends Command
         $this->newLine();
 
         try {
-            $client = new Client(['timeout' => 20, 'connect_timeout' => 15]);
+            $client = new Client([
+                'timeout' => 20,
+                'connect_timeout' => 15,
+                'curl' => [
+                    \CURLOPT_IPRESOLVE => \CURL_IPRESOLVE_V4,
+                ],
+            ]);
             $response = $client->post("https://api.telegram.org/bot{$token}/sendMessage", [
                 'http_errors' => false,
                 'json' => [

@@ -301,9 +301,12 @@ class ProxyService extends MainService
         $proxyApi = new ProxyApi($botDto->api_key);
         $status = $proxyApi->check($order_org_id);
 
-        $result = $status['proxy_status'];
+        if (! is_array($status) || ! array_key_exists('proxy_status', $status)) {
+            $hint = is_array($status) && isset($status['error']) ? (string) $status['error'] : json_encode($status);
+            throw new \RuntimeException('Ответ провайдера без proxy_status: '.$hint);
+        }
 
-        return $result;
+        return $status['proxy_status'];
     }
 
     /**
@@ -363,6 +366,11 @@ class ProxyService extends MainService
         $proxyApi = new ProxyApi($botDto->api_key);
 
         $count = $proxyApi->getcount($country, $version);
+
+        if (! is_array($count) || ! array_key_exists('count', $count)) {
+            $hint = is_array($count) && isset($count['error']) ? (string) $count['error'] : json_encode($count);
+            throw new \RuntimeException('Ответ провайдера без count: '.$hint);
+        }
 
         return $count['count'];
     }
