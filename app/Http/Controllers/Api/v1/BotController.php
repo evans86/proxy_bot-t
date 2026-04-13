@@ -139,16 +139,10 @@ class BotController extends Controller
     public function getSettings(Request $request)
     {
         try {
-            if (is_null($request->public_key)) {
+            if (!$request->filled('public_key')) {
                 return ApiHelpers::error('Not found params: public_key');
             }
-            if (is_null($request->private_key)) {
-                return ApiHelpers::error('Not found params: private_key');
-            }
-            $bot = Bot::query()
-                ->where('public_key', $request->public_key)
-                ->where('private_key', $request->private_key)
-                ->first();
+            $bot = Bot::query()->where('public_key', $request->public_key)->first();
             if (empty($bot)) {
                 throw new \RuntimeException('Not found module.');
             }
