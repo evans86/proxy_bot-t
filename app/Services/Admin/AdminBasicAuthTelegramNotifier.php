@@ -2,7 +2,6 @@
 
 namespace App\Services\Admin;
 
-use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -84,17 +83,7 @@ class AdminBasicAuthTelegramNotifier
         }
 
         try {
-            $connectTimeout = max(5.0, (float) config('http_basic.notify_telegram_connect_timeout', 30));
-            $totalTimeout = max($connectTimeout + 5.0, (float) config('http_basic.notify_telegram_timeout', 60));
-
-            // Сервер без IPv6: иначе cURL выбирает AAAA api.telegram.org и падает с "Network is unreachable"
-            $client = new Client([
-                'timeout' => $totalTimeout,
-                'connect_timeout' => $connectTimeout,
-                'curl' => [
-                    \CURLOPT_IPRESOLVE => \CURL_IPRESOLVE_V4,
-                ],
-            ]);
+            $client = TelegramHttpClientFactory::make();
             $response = $client->post("https://api.telegram.org/bot{$token}/sendMessage", [
                 'http_errors' => false,
                 'json' => [

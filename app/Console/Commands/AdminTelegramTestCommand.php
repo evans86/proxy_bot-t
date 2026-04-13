@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use GuzzleHttp\Client;
+use App\Services\Admin\TelegramHttpClientFactory;
 use Illuminate\Console\Command;
 
 class AdminTelegramTestCommand extends Command
@@ -20,6 +20,8 @@ class AdminTelegramTestCommand extends Command
         $this->line('Конфиг: http_basic.notify_telegram_token / notify_telegram_chat_id');
         $this->line('Токен: '.$this->maskToken($token));
         $this->line('chat_id: '.($chatId === null || $chatId === '' ? '(пусто)' : (string) $chatId));
+        $proxy = config('http_basic.notify_telegram_http_proxy');
+        $this->line('HTTP proxy: '.(is_string($proxy) && trim($proxy) !== '' ? $this->maskProxy((string) $proxy) : '(не задан)'));
         $this->newLine();
 
         if ($token === '' || $chatId === null || $chatId === '') {
@@ -42,16 +44,7 @@ class AdminTelegramTestCommand extends Command
         $this->newLine();
 
         try {
-            $connectTimeout = max(5.0, (float) config('http_basic.notify_telegram_connect_timeout', 30));
-            $totalTimeout = max($connectTimeout + 5.0, (float) config('http_basic.notify_telegram_timeout', 60));
-
-            $client = new Client([
-                'timeout' => $totalTimeout,
-                'connect_timeout' => $connectTimeout,
-                'curl' => [
-                    \CURLOPT_IPRESOLVE => \CURL_IPRESOLVE_V4,
-                ],
-            ]);
+            $client = TelegramHttpClientFactory::make();
             $response = $client->post("https://api.telegram.org/bot{$token}/sendMessage", [
                 'http_errors' => false,
                 'json' => [
@@ -101,5 +94,14 @@ class AdminTelegramTestCommand extends Command
         }
 
         return substr($token, 0, 4).'…'.substr($token, -4);
+    }
+
+    private function maskProxy(string $proxy): string
+    {
+        if (preg_match('#^(https?://)([^:]+):([^@]+)@(.+)$#', $proxy, $m)) {
+            return $m[1].$m[2].':***@'.$m[4];
+        }
+
+        return $proxy;
     }
 }

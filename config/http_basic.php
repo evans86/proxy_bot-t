@@ -32,4 +32,10 @@ return [
     'notify_telegram_connect_timeout' => (float) env('ADMIN_HTTP_BASIC_NOTIFY_TELEGRAM_CONNECT_TIMEOUT', 30),
     'notify_telegram_timeout' => (float) env('ADMIN_HTTP_BASIC_NOTIFY_TELEGRAM_TIMEOUT', 60),
 
+    /**
+     * HTTP(S) прокси для запросов к Telegram (например, если прямой доступ к api.telegram.org недоступен).
+     * Формат: http://user:pass@host:port
+     */
+    'notify_telegram_http_proxy' => env('ADMIN_HTTP_BASIC_NOTIFY_TELEGRAM_HTTP_PROXY'),
+
 ];
