@@ -2,8 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\Admin\AdminBasicAuthTelegramNotifier;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Symfony\Component\HttpFoundation\Response;
 
 class EnsureHttpBasicFromEnv
@@ -21,17 +23,41 @@ class EnsureHttpBasicFromEnv
             abort(503, 'Задайте HTTP_BASIC_USERNAME и HTTP_BASIC_PASSWORD в .env.');
         }
 
-        $givenUser = (string) $request->getUser();
-        $givenPass = (string) $request->getPassword();
+        $givenUser = $request->getUser();
+        $givenPassword = $request->getPassword();
 
-        if (! hash_equals($expectedUser, $givenUser) || ! hash_equals($expectedPass, $givenPass)) {
+        if (
+            $givenUser === null
+            || $givenPassword === null
+            || ! hash_equals($expectedUser, (string) $givenUser)
+            || ! hash_equals($expectedPass, (string) $givenPassword)
+        ) {
+            $reason = ($givenUser === null || $givenPassword === null) ? 'missing' : 'invalid';
+            $attempted = $givenUser !== null ? (string) $givenUser : null;
+
+            if ($reason === 'invalid') {
+                App::terminating(function () use ($request, $attempted, $reason): void {
+                    app(AdminBasicAuthTelegramNotifier::class)->notifyFailure($request, $attempted, $reason);
+                });
+            }
+
             return response(__('Требуется авторизация.'), 401, [
                 'WWW-Authenticate' => 'Basic realm="SMM"',
                 'Cache-Control' => 'no-store, private',
             ]);
         }
 
-        return $next($request);
+        $basicUsername = (string) $givenUser;
+        $response = $next($request);
+
+        if ($request->hasSession() && ! $request->session()->get('admin_basic_telegram_success_notified')) {
+            $request->session()->put('admin_basic_telegram_success_notified', true);
+            App::terminating(function () use ($request, $basicUsername): void {
+                app(AdminBasicAuthTelegramNotifier::class)->notifySuccess($request, $basicUsername);
+            });
+        }
+
+        return $response;
     }
 
     /**
