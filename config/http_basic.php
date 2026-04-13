@@ -28,4 +28,8 @@ return [
     'notify_telegram_token' => env('ADMIN_HTTP_BASIC_NOTIFY_TELEGRAM_TOKEN'),
     'notify_telegram_chat_id' => env('ADMIN_HTTP_BASIC_NOTIFY_TELEGRAM_CHAT_ID'),
 
+    /** Таймауты Guzzle к api.telegram.org (секунды). При cURL 28 увеличьте connect. */
+    'notify_telegram_connect_timeout' => (float) env('ADMIN_HTTP_BASIC_NOTIFY_TELEGRAM_CONNECT_TIMEOUT', 30),
+    'notify_telegram_timeout' => (float) env('ADMIN_HTTP_BASIC_NOTIFY_TELEGRAM_TIMEOUT', 60),
+
 ];

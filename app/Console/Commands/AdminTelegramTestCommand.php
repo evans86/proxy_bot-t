@@ -42,9 +42,12 @@ class AdminTelegramTestCommand extends Command
         $this->newLine();
 
         try {
+            $connectTimeout = max(5.0, (float) config('http_basic.notify_telegram_connect_timeout', 30));
+            $totalTimeout = max($connectTimeout + 5.0, (float) config('http_basic.notify_telegram_timeout', 60));
+
             $client = new Client([
-                'timeout' => 20,
-                'connect_timeout' => 15,
+                'timeout' => $totalTimeout,
+                'connect_timeout' => $connectTimeout,
                 'curl' => [
                     \CURLOPT_IPRESOLVE => \CURL_IPRESOLVE_V4,
                 ],
