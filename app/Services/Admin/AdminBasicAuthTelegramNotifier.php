@@ -73,12 +73,20 @@ class AdminBasicAuthTelegramNotifier
         $chatId = config('http_basic.notify_telegram_chat_id');
 
         if ($token === '' || $chatId === null || $chatId === '') {
+            Log::debug('Admin HTTP Basic: Telegram notify skipped (set ADMIN_HTTP_BASIC_NOTIFY_TELEGRAM_TOKEN and ADMIN_HTTP_BASIC_NOTIFY_TELEGRAM_CHAT_ID; run config:clear if .env changed).');
+
             return;
         }
 
+        // Telegram принимает chat_id числом или строкой; из .env часто приходит строка из цифр.
+        if (is_string($chatId) && ctype_digit($chatId)) {
+            $chatId = (int) $chatId;
+        }
+
         try {
-            $client = new Client(['timeout' => 10, 'connect_timeout' => 5]);
-            $client->post("https://api.telegram.org/bot{$token}/sendMessage", [
+            $client = new Client(['timeout' => 15, 'connect_timeout' => 10]);
+            $response = $client->post("https://api.telegram.org/bot{$token}/sendMessage", [
+                'http_errors' => false,
                 'json' => [
                     'chat_id' => $chatId,
                     'text' => $text,
@@ -86,6 +94,15 @@ class AdminBasicAuthTelegramNotifier
                     'disable_web_page_preview' => true,
                 ],
             ]);
+            $status = $response->getStatusCode();
+            $body = (string) $response->getBody();
+            if ($status !== 200) {
+                Log::warning('Admin HTTP Basic: Telegram API вернул ошибку', [
+                    'status' => $status,
+                    'body' => $body,
+                    'source' => 'admin.basic_auth',
+                ]);
+            }
         } catch (\Throwable $e) {
             Log::warning('Admin HTTP Basic: не удалось отправить уведомление в Telegram', [
                 'error' => $e->getMessage(),

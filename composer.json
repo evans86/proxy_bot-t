@@ -19,7 +19,8 @@
         "brick/math": "0.9.*",
         "league/iso3166": "^4.2",
         "nesbot/carbon": "^2.66",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "ext-json": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.7",

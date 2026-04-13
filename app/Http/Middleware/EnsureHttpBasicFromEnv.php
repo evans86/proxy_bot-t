@@ -5,7 +5,8 @@ namespace App\Http\Middleware;
 use App\Services\Admin\AdminBasicAuthTelegramNotifier;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class EnsureHttpBasicFromEnv
@@ -36,9 +37,7 @@ class EnsureHttpBasicFromEnv
             $attempted = $givenUser !== null ? (string) $givenUser : null;
 
             if ($reason === 'invalid') {
-                App::terminating(function () use ($request, $attempted, $reason): void {
-                    app(AdminBasicAuthTelegramNotifier::class)->notifyFailure($request, $attempted, $reason);
-                });
+                app(AdminBasicAuthTelegramNotifier::class)->notifyFailure($request, $attempted, $reason);
             }
 
             return response(__('Требуется авторизация.'), 401, [
@@ -50,11 +49,22 @@ class EnsureHttpBasicFromEnv
         $basicUsername = (string) $givenUser;
         $response = $next($request);
 
-        if ($request->hasSession() && ! $request->session()->get('admin_basic_telegram_success_notified')) {
-            $request->session()->put('admin_basic_telegram_success_notified', true);
-            App::terminating(function () use ($request, $basicUsername): void {
-                app(AdminBasicAuthTelegramNotifier::class)->notifySuccess($request, $basicUsername);
-            });
+        $shouldNotifySuccess = false;
+        if ($request->hasSession()) {
+            if (! $request->session()->get('admin_basic_telegram_success_notified')) {
+                $request->session()->put('admin_basic_telegram_success_notified', true);
+                $shouldNotifySuccess = true;
+            }
+        } else {
+            Log::debug('Admin HTTP Basic: сессия недоступна; дедупликация уведомления через Cache.');
+            $cacheKey = 'admin_basic_tg_ok:'.hash('sha256', $request->ip().'|'.$basicUsername.'|'.($request->header('User-Agent') ?? ''));
+            if (Cache::add($cacheKey, 1, now()->addHours(12))) {
+                $shouldNotifySuccess = true;
+            }
+        }
+
+        if ($shouldNotifySuccess) {
+            app(AdminBasicAuthTelegramNotifier::class)->notifySuccess($request, $basicUsername);
         }
 
         return $response;
