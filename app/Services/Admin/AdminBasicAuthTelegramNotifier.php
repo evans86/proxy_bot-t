@@ -14,6 +14,7 @@ class AdminBasicAuthTelegramNotifier
     {
         $lines = [
             '<b>✅ HTTP Basic: успех</b>',
+            '<b>Проект:</b> proxy',
             '',
             '<b>Логин:</b> '.e($basicUsername),
         ];
@@ -30,6 +31,7 @@ class AdminBasicAuthTelegramNotifier
     {
         $lines = [
             '<b>❌ HTTP Basic: отказ</b>',
+            '<b>Проект:</b> proxy',
             '',
         ];
         if ($reason === 'missing') {
