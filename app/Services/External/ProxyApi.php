@@ -8,6 +8,9 @@ class ProxyApi
 {
     const HOST = 'https://proxy6.net/api/';
 
+    /** Исходящий HTTP-прокси для запросов к Proxy6 (host:port:user:pass) */
+    private const OUTBOUND_PROXY = 'http://VtZNR9Hb:nXC9nQ45@186.246.79.63:64328';
+
     private $apiKey;
 
     public function __construct($apiKey)
@@ -37,7 +40,7 @@ class ProxyApi
         $client = new Client(['base_uri' => self::HOST]);
 //        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
         $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
-            'proxy' => 'http://VtZNR9Hb:nXC9nQ45@45.147.246.121:64614',
+            'proxy' => self::OUTBOUND_PROXY,
         ]);
 
         $result = $response->getBody()->getContents();
@@ -55,7 +58,7 @@ class ProxyApi
         $client = new Client(['base_uri' => self::HOST]);
 //        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
         $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
-            'proxy' => 'http://VtZNR9Hb:nXC9nQ45@45.147.246.121:64614',
+            'proxy' => self::OUTBOUND_PROXY,
         ]);
         $result = $response->getBody()->getContents();
         return json_decode($result, true);
@@ -71,7 +74,7 @@ class ProxyApi
         $client = new Client(['base_uri' => self::HOST]);
 //        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
         $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
-            'proxy' => 'http://VtZNR9Hb:nXC9nQ45@45.147.246.121:64614',
+            'proxy' => self::OUTBOUND_PROXY,
         ]);
         $result = $response->getBody()->getContents();
         return json_decode($result, true);
@@ -89,7 +92,7 @@ class ProxyApi
         $client = new Client(['base_uri' => self::HOST]);
 //        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
         $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
-            'proxy' => 'http://VtZNR9Hb:nXC9nQ45@45.147.246.121:64614',
+            'proxy' => self::OUTBOUND_PROXY,
         ]);
         $result = $response->getBody()->getContents();
         return json_decode($result, true);
@@ -106,7 +109,7 @@ class ProxyApi
         $client = new Client(['base_uri' => self::HOST]);
 //        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
         $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
-            'proxy' => 'http://VtZNR9Hb:nXC9nQ45@45.147.246.121:64614',
+            'proxy' => self::OUTBOUND_PROXY,
         ]);
         $result = $response->getBody()->getContents();
         return json_decode($result, true);
@@ -124,7 +127,7 @@ class ProxyApi
         $client = new Client(['base_uri' => self::HOST]);
 //        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
         $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
-            'proxy' => 'http://VtZNR9Hb:nXC9nQ45@45.147.246.121:64614',
+            'proxy' => self::OUTBOUND_PROXY,
         ]);
         $result = $response->getBody()->getContents();
         return json_decode($result, true);
@@ -145,7 +148,7 @@ class ProxyApi
         $client = new Client(['base_uri' => self::HOST]);
 //        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
         $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
-            'proxy' => 'http://VtZNR9Hb:nXC9nQ45@45.147.246.121:64614',
+            'proxy' => self::OUTBOUND_PROXY,
         ]);
         $result = $response->getBody()->getContents();
         return json_decode($result, true);
@@ -162,7 +165,7 @@ class ProxyApi
         $client = new Client(['base_uri' => self::HOST]);
 //        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
         $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
-            'proxy' => 'http://VtZNR9Hb:nXC9nQ45@45.147.246.121:64614',
+            'proxy' => self::OUTBOUND_PROXY,
         ]);
         $result = $response->getBody()->getContents();
         return json_decode($result, true);
@@ -179,7 +182,7 @@ class ProxyApi
         $client = new Client(['base_uri' => self::HOST]);
 //        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
         $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
-            'proxy' => 'http://VtZNR9Hb:nXC9nQ45@45.147.246.121:64614',
+            'proxy' => self::OUTBOUND_PROXY,
         ]);
         $result = $response->getBody()->getContents();
         return json_decode($result, true);
@@ -195,7 +198,7 @@ class ProxyApi
         $client = new Client(['base_uri' => self::HOST]);
 //        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
         $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
-            'proxy' => 'http://VtZNR9Hb:nXC9nQ45@45.147.246.121:64614',
+            'proxy' => self::OUTBOUND_PROXY,
         ]);
         $result = $response->getBody()->getContents();
         return json_decode($result, true);
@@ -211,7 +214,7 @@ class ProxyApi
         $client = new Client(['base_uri' => self::HOST]);
 //        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
         $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
-            'proxy' => 'http://VtZNR9Hb:nXC9nQ45@45.147.246.121:64614',
+            'proxy' => self::OUTBOUND_PROXY,
         ]);
         $result = $response->getBody()->getContents();
         return json_decode($result, true);
