@@ -8,9 +8,6 @@ class ProxyApi
 {
     const HOST = 'https://proxy6.net/api/';
 
-    /** Исходящий HTTP-прокси для запросов к Proxy6 (host:port:user:pass) */
-    private const OUTBOUND_PROXY = 'http://VtZNR9Hb:nXC9nQ45@154.219.236.59:64512';
-
     private $apiKey;
 
     public function __construct($apiKey)
@@ -18,10 +15,33 @@ class ProxyApi
         $this->apiKey = $apiKey;
     }
 
+    private function request(string $method, array $params = []): array
+    {
+        $client = new Client([
+            'base_uri' => self::HOST,
+            'timeout' => 15,
+            'connect_timeout' => 5,
+        ]);
+
+        $url = $this->apiKey . '/' . $method;
+        if ($params !== []) {
+            $url .= '?' . http_build_query($params);
+        }
+
+        $response = $client->get($url);
+        $result = $response->getBody()->getContents();
+
+        return json_decode($result, true);
+    }
+
     //Проверка соединения
     public function ping()
     {
-        $client = new Client(['base_uri' => self::HOST]);
+        $client = new Client([
+            'base_uri' => self::HOST,
+            'timeout' => 15,
+            'connect_timeout' => 5,
+        ]);
         $response = $client->get($this->apiKey);
 
         $result = $response->getBody()->getContents();
@@ -31,193 +51,104 @@ class ProxyApi
     //Получение информации о сумме заказа;
     public function getprice($count, $period, $version = 6)
     {
-        $requestParam = [
+        return $this->request(__FUNCTION__, [
             'count' => $count,
             'period' => $period,
             'version' => $version,
-        ];
-
-        $client = new Client(['base_uri' => self::HOST]);
-//        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
-        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
-            'proxy' => self::OUTBOUND_PROXY,
         ]);
-
-        $result = $response->getBody()->getContents();
-        return json_decode($result, true);
     }
 
     //Получение информации о доступном кол-ве прокси для конкретной страны;
     public function getcount($country, $version = 6)
     {
-        $requestParam = [
+        return $this->request(__FUNCTION__, [
             'country' => $country,
             'version' => $version,
-        ];
-
-        $client = new Client(['base_uri' => self::HOST]);
-//        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
-        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
-            'proxy' => self::OUTBOUND_PROXY,
         ]);
-        $result = $response->getBody()->getContents();
-        return json_decode($result, true);
     }
 
     //Получение списка доступных стран;
     public function getcountry($version = 6)
     {
-        $requestParam = [
+        return $this->request(__FUNCTION__, [
             'version' => $version,
-        ];
-
-        $client = new Client(['base_uri' => self::HOST]);
-//        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
-        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
-            'proxy' => self::OUTBOUND_PROXY,
         ]);
-        $result = $response->getBody()->getContents();
-        return json_decode($result, true);
     }
 
     //Получение списка ваших прокси;
     public function getproxy($descr, $state = 'all', $page = 1, $limit = 1000)
     {
-        $requestParam = [
+        return $this->request(__FUNCTION__, [
             'state' => $state,
             'descr' => $descr,
             'limit' => $limit,
-        ];
-
-        $client = new Client(['base_uri' => self::HOST]);
-//        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
-        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
-            'proxy' => self::OUTBOUND_PROXY,
         ]);
-        $result = $response->getBody()->getContents();
-        return json_decode($result, true);
     }
 
     //Изменение типа (протокола) прокси;
     public function settype($ids, $type = 'http')
     {
-        $requestParam = [
+        return $this->request(__FUNCTION__, [
             'ids' => $ids,
-            'type' => $type
-        ];
-
-        $client = new Client(['base_uri' => self::HOST]);
-//        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
-        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
-            'proxy' => self::OUTBOUND_PROXY,
+            'type' => $type,
         ]);
-        $result = $response->getBody()->getContents();
-        return json_decode($result, true);
     }
 
     //Обновление технического комментария;
     public function setdescr($new, $old, $ids)
     {
-        $requestParam = [
+        return $this->request(__FUNCTION__, [
             'new' => $new,
             'old' => $old,
             'ids' => $ids,
-        ];
-
-        $client = new Client(['base_uri' => self::HOST]);
-//        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
-        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
-            'proxy' => self::OUTBOUND_PROXY,
         ]);
-        $result = $response->getBody()->getContents();
-        return json_decode($result, true);
     }
 
     //Покупка прокси;
     public function buy($count, $period, $country, $version = 6, $type = 'http', $descr = null)
     {
-        $requestParam = [
+        return $this->request(__FUNCTION__, [
             'count' => $count,
             'period' => $period,
             'country' => $country,
             'descr' => $descr,
             'version' => $version,
             'type' => $type,
-        ];
-
-        $client = new Client(['base_uri' => self::HOST]);
-//        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
-        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
-            'proxy' => self::OUTBOUND_PROXY,
         ]);
-        $result = $response->getBody()->getContents();
-        return json_decode($result, true);
     }
 
     //Продление списка прокси;
     public function prolong($period, $ids)
     {
-        $requestParam = [
+        return $this->request(__FUNCTION__, [
             'period' => $period,
             'ids' => $ids,
-        ];
-
-        $client = new Client(['base_uri' => self::HOST]);
-//        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
-        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
-            'proxy' => self::OUTBOUND_PROXY,
         ]);
-        $result = $response->getBody()->getContents();
-        return json_decode($result, true);
     }
 
     //Удаление прокси;
     public function delete($ids, $descr = null)
     {
-        $requestParam = [
+        return $this->request(__FUNCTION__, [
             'ids' => $ids,
             'descr' => $descr,
-        ];
-
-        $client = new Client(['base_uri' => self::HOST]);
-//        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
-        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
-            'proxy' => self::OUTBOUND_PROXY,
         ]);
-        $result = $response->getBody()->getContents();
-        return json_decode($result, true);
     }
 
     //Проверка валидности прокси.
     public function check($ids)
     {
-        $requestParam = [
+        return $this->request(__FUNCTION__, [
             'ids' => $ids,
-        ];
-
-        $client = new Client(['base_uri' => self::HOST]);
-//        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
-        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
-            'proxy' => self::OUTBOUND_PROXY,
         ]);
-        $result = $response->getBody()->getContents();
-        return json_decode($result, true);
     }
 
     //Привязка/удаление авторизации прокси по ip.
     public function ipauth($ip)
     {
-        $requestParam = [
+        return $this->request(__FUNCTION__, [
             'ip' => $ip,
-        ];
-
-        $client = new Client(['base_uri' => self::HOST]);
-//        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam));
-        $response = $client->get($this->apiKey . '/' . __FUNCTION__ . '?' . http_build_query($requestParam), [
-            'proxy' => self::OUTBOUND_PROXY,
         ]);
-        $result = $response->getBody()->getContents();
-        return json_decode($result, true);
     }
 
 }
