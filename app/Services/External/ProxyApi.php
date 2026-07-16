@@ -9,7 +9,7 @@ class ProxyApi
     const HOST = 'https://proxy6.net/api/';
 
     /** Исходящий HTTP-прокси для запросов к Proxy6 (host:port:user:pass) */
-    private const OUTBOUND_PROXY = 'http://VtZNR9Hb:nXC9nQ45@186.246.79.63:64328';
+    private const OUTBOUND_PROXY = 'http://VtZNR9Hb:nXC9nQ45@154.219.236.59:64512';
 
     private $apiKey;
 
