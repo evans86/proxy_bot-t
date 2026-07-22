@@ -15,13 +15,25 @@ class ProxyApi
         $this->apiKey = $apiKey;
     }
 
-    private function request(string $method, array $params = []): array
+    private function createClient(): Client
     {
-        $client = new Client([
+        $options = [
             'base_uri' => self::HOST,
             'timeout' => 15,
             'connect_timeout' => 5,
-        ]);
+        ];
+
+        $proxy = config('services.proxy6_outbound_proxy');
+        if (!empty($proxy)) {
+            $options['proxy'] = $proxy;
+        }
+
+        return new Client($options);
+    }
+
+    private function request(string $method, array $params = []): array
+    {
+        $client = $this->createClient();
 
         $url = $this->apiKey . '/' . $method;
         if ($params !== []) {
@@ -37,11 +49,7 @@ class ProxyApi
     //Проверка соединения
     public function ping()
     {
-        $client = new Client([
-            'base_uri' => self::HOST,
-            'timeout' => 15,
-            'connect_timeout' => 5,
-        ]);
+        $client = $this->createClient();
         $response = $client->get($this->apiKey);
 
         $result = $response->getBody()->getContents();
