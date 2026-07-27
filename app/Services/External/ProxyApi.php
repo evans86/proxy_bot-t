@@ -40,7 +40,7 @@ class ProxyApi
     {
         $client = $this->createClient();
 
-        $url = $this->apiKey . '/' . $method . '/';
+        $url = $this->apiKey . '/' . $method;
         if ($params !== []) {
             $url .= '?' . http_build_query($params);
         }
@@ -55,7 +55,7 @@ class ProxyApi
     public function ping()
     {
         $client = $this->createClient();
-        $response = $client->get($this->apiKey . '/');
+        $response = $client->get($this->apiKey);
 
         $result = $response->getBody()->getContents();
         return json_decode($result, true);
