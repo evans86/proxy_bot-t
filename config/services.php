@@ -34,10 +34,7 @@ return [
         'key' => env('PROXY_KEY'),
     ],
 
-    'proxy6_outbound_proxy' => env(
-        'PROXY6_OUTBOUND_PROXY',
-        'http://VtZNR9Hb:nXC9nQ45@153.80.6.241:62960'
-    ),
+    'proxy6_outbound_proxy' => env('PROXY6_OUTBOUND_PROXY'),
 
     'bot_api_keys' => [
         'modules_log_bot_1' => env('MODULES_LOG_BOT_1'),
