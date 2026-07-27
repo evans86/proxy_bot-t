@@ -45,7 +45,7 @@ class OrderServiceTest extends \Tests\TestCase
         self::assertEquals($bot->public_key, $public_key);
         self::assertEquals($bot->private_key, $private_key);
         self::assertEquals($bot->bot_id, $bot_id);
-        self::assertEquals($bot->resource_link, BotService::DEFAULT_HOST);
+        self::assertEquals($bot->resource_link, BotService::defaultHost());
         self::assertEquals($bot->api_key, '');
 
         $dto = BotFactory::fromEntity($bot);
@@ -123,7 +123,7 @@ class OrderServiceTest extends \Tests\TestCase
         self::assertEquals($bot->public_key, $public_key);
         self::assertEquals($bot->private_key, $private_key);
         self::assertEquals($bot->bot_id, $bot_id);
-        self::assertEquals($bot->resource_link, BotService::DEFAULT_HOST);
+        self::assertEquals($bot->resource_link, BotService::defaultHost());
         self::assertEquals($bot->api_key, '');
 
         $dto = BotFactory::fromEntity($bot);
@@ -213,7 +213,7 @@ class OrderServiceTest extends \Tests\TestCase
         self::assertEquals($bot->public_key, $public_key);
         self::assertEquals($bot->private_key, $private_key);
         self::assertEquals($bot->bot_id, $bot_id);
-        self::assertEquals($bot->resource_link, BotService::DEFAULT_HOST);
+        self::assertEquals($bot->resource_link, BotService::defaultHost());
         self::assertEquals($bot->api_key, '');
 
         $dto = BotFactory::fromEntity($bot);
@@ -291,7 +291,7 @@ class OrderServiceTest extends \Tests\TestCase
         self::assertEquals($bot->public_key, $public_key);
         self::assertEquals($bot->private_key, $private_key);
         self::assertEquals($bot->bot_id, $bot_id);
-        self::assertEquals($bot->resource_link, BotService::DEFAULT_HOST);
+        self::assertEquals($bot->resource_link, BotService::defaultHost());
         self::assertEquals($bot->api_key, '');
 
         $dto = BotFactory::fromEntity($bot);
@@ -345,7 +345,7 @@ class OrderServiceTest extends \Tests\TestCase
         self::assertEquals($bot->public_key, $public_key);
         self::assertEquals($bot->private_key, $private_key);
         self::assertEquals($bot->bot_id, $bot_id);
-        self::assertEquals($bot->resource_link, BotService::DEFAULT_HOST);
+        self::assertEquals($bot->resource_link, BotService::defaultHost());
         self::assertEquals($bot->api_key, '');
 
         $dto = BotFactory::fromEntity($bot);

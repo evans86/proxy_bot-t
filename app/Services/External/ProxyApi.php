@@ -6,8 +6,6 @@ use GuzzleHttp\Client;
 
 class ProxyApi
 {
-    const HOST = 'https://proxy6.net/api/';
-
     private $apiKey;
 
     public function __construct($apiKey)
@@ -15,10 +13,17 @@ class ProxyApi
         $this->apiKey = $apiKey;
     }
 
+    private function apiBase(): string
+    {
+        $base = (string) config('services.proxy6_api_base', 'https://px6.link/api/');
+
+        return rtrim($base, '/') . '/';
+    }
+
     private function createClient(): Client
     {
         $options = [
-            'base_uri' => self::HOST,
+            'base_uri' => $this->apiBase(),
             'timeout' => 15,
             'connect_timeout' => 5,
         ];
@@ -35,7 +40,7 @@ class ProxyApi
     {
         $client = $this->createClient();
 
-        $url = $this->apiKey . '/' . $method;
+        $url = $this->apiKey . '/' . $method . '/';
         if ($params !== []) {
             $url .= '?' . http_build_query($params);
         }
@@ -50,7 +55,7 @@ class ProxyApi
     public function ping()
     {
         $client = $this->createClient();
-        $response = $client->get($this->apiKey);
+        $response = $client->get($this->apiKey . '/');
 
         $result = $response->getBody()->getContents();
         return json_decode($result, true);

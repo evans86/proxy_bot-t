@@ -8,7 +8,13 @@ use App\Services\MainService;
 
 class BotService extends MainService
 {
-    const DEFAULT_HOST = 'https://proxy6.net/api/';
+    /** @deprecated use defaultHost() */
+    const DEFAULT_HOST = 'https://px6.link/api/';
+
+    public static function defaultHost(): string
+    {
+        return rtrim((string) config('services.proxy6_api_base', self::DEFAULT_HOST), '/') . '/';
+    }
 
     /**
      * Создание модуля
@@ -30,7 +36,7 @@ class BotService extends MainService
         $bot->version = 1;
         $bot->color = 1;
         $bot->mtproto = 0;
-        $bot->resource_link = self::DEFAULT_HOST;
+        $bot->resource_link = self::defaultHost();
         if(!$bot->save())
             throw new \RuntimeException('bot dont save');
         return $bot;

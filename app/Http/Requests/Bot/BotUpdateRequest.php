@@ -48,7 +48,7 @@ class BotUpdateRequest extends FormRequest
         $dto->mtproto = intval($this->mtproto);
         $dto->version = intval($this->version);
         if(filter_var($this->resource_link, FILTER_VALIDATE_URL) === false)
-            $dto->resource_link = BotService::DEFAULT_HOST;
+            $dto->resource_link = BotService::defaultHost();
         else
             $dto->resource_link = $this->resource_link;
         return $dto;
