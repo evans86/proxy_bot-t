@@ -13,6 +13,26 @@ class BottApi
      * @param array<string, mixed> $params
      * @return array<string, mixed>
      */
+    private static function getModuleUser(string $action, array $params): array
+    {
+        $client = new Client([
+            'base_uri' => self::HOST,
+            'timeout' => 15,
+            'connect_timeout' => 5,
+        ]);
+
+        $response = $client->request('GET', 'v1/module/user/' . $action, [
+            'query' => $params,
+            'http_errors' => false,
+        ]);
+
+        return self::decodeResponse($response->getStatusCode(), (string) $response->getBody()->getContents());
+    }
+
+    /**
+     * @param array<string, mixed> $params
+     * @return array<string, mixed>
+     */
     private static function postModuleUser(string $action, array $params): array
     {
         $client = new Client([
@@ -26,7 +46,14 @@ class BottApi
             'http_errors' => false,
         ]);
 
-        $body = (string) $response->getBody()->getContents();
+        return self::decodeResponse($response->getStatusCode(), (string) $response->getBody()->getContents());
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private static function decodeResponse(int $statusCode, string $body): array
+    {
         $decoded = json_decode($body, true);
 
         if (! is_array($decoded)) {
@@ -37,9 +64,13 @@ class BottApi
             ];
         }
 
-        if ($response->getStatusCode() >= 400 && empty($decoded['message'])) {
+        if ($statusCode >= 400 && empty($decoded['message'])) {
             $decoded['result'] = false;
-            $decoded['message'] = 'Ошибка BOT-T API (HTTP ' . $response->getStatusCode() . ')';
+            $decoded['message'] = 'Ошибка BOT-T API (HTTP ' . $statusCode . ')';
+        }
+
+        if ($statusCode >= 400 && ! isset($decoded['result'])) {
+            $decoded['result'] = false;
         }
 
         return $decoded;
@@ -60,7 +91,7 @@ class BottApi
             return ['result' => false, 'message' => 'Секретный ключ не указан', 'data' => []];
         }
 
-        $result = self::postModuleUser('check-secret', [
+        $result = self::getModuleUser('check-secret', [
             'public_key' => $public_key,
             'private_key' => $private_key,
             'id' => $telegram_id,
@@ -84,7 +115,7 @@ class BottApi
      */
     public static function get(int $telegram_id, string $public_key, string $private_key): array
     {
-        return self::postModuleUser('get', [
+        return self::getModuleUser('get', [
             'public_key' => $public_key,
             'private_key' => $private_key,
             'id' => $telegram_id,
