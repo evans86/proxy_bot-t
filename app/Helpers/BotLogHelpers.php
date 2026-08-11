@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Support\SafeLog;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 
@@ -11,20 +12,19 @@ class BotLogHelpers
     {
         $client = new Client([
             'curl' => [
-                CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4, // Принудительно IPv4
+                CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
             ],
             'timeout' => 10,
             'connect_timeout' => 5,
         ]);
 
-        $ids = [6715142449]; // Список chat_id
+        $ids = [6715142449];
         $bots = [
-            config('services.bot_api_keys.modules_log_bot_1'), // Основной бот
-            config('services.bot_api_keys.modules_log_bot_2')  // Резервный бот
+            config('services.bot_api_keys.modules_log_bot_1'),
+            config('services.bot_api_keys.modules_log_bot_2'),
         ];
 
-        // Если текст пустой, заменяем его на заглушку (или оставляем пустым)
-        $message = ($text === '') ? '[Empty message]' : $text;
+        $message = ($text === '') ? '[Empty message]' : SafeLog::sanitize((string) $text);
 
         $lastError = null;
 
@@ -38,15 +38,18 @@ class BotLogHelpers
                         ],
                     ]);
                 }
-                return true; // Успешно отправлено
+
+                return true;
             } catch (\Exception $e) {
                 $lastError = $e;
-                continue; // Пробуем следующего бота
+                continue;
             }
         }
 
-        // Если все боты не сработали, логируем ошибку (или просто игнорируем)
-        error_log("Telegram send failed: " . $lastError->getMessage());
+        if ($lastError !== null) {
+            error_log('Telegram send failed: ' . SafeLog::exceptionMessage($lastError));
+        }
+
         return false;
     }
 }

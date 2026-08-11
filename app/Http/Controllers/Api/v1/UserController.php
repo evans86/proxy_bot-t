@@ -43,7 +43,7 @@ class UserController extends Controller
             return ApiHelpers::error($r->getMessage());
         } catch (\Exception $e) {
             BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
-            \Log::error($e->getMessage());
+            \Log::error(\App\Support\SafeLog::exceptionMessage($e));
             return ApiHelpers::error('Get user error');
         }
     }
@@ -76,7 +76,7 @@ class UserController extends Controller
             return ApiHelpers::error($r->getMessage());
         } catch (\Exception $e) {
             BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
-            \Log::error($e->getMessage());
+            \Log::error(\App\Support\SafeLog::exceptionMessage($e));
             return ApiHelpers::error('Language error');
         }
     }

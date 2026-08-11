@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use App\Support\SafeLog;
+
 class ApiHelpers
 {
     /**
@@ -26,7 +28,7 @@ class ApiHelpers
     {
         return [
             'result' => false,
-            'message' => $message,
+            'message' => SafeLog::sanitize($message),
             'data' => [],
         ];
     }
@@ -50,7 +52,7 @@ class ApiHelpers
     {
         return [
             'result' => false,
-            'message' => $message,
+            'message' => SafeLog::sanitize($message),
             'data' => [],
         ];
     }

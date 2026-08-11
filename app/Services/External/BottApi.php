@@ -10,29 +10,68 @@ class BottApi
     const HOST = 'https://api.bot-t.com/';
 
     /**
+     * @param array<string, mixed> $params
+     * @return array<string, mixed>
+     */
+    private static function postModuleUser(string $action, array $params): array
+    {
+        $client = new Client([
+            'base_uri' => self::HOST,
+            'timeout' => 15,
+            'connect_timeout' => 5,
+        ]);
+
+        $response = $client->request('POST', 'v1/module/user/' . $action, [
+            'form_params' => $params,
+            'http_errors' => false,
+        ]);
+
+        $body = (string) $response->getBody()->getContents();
+        $decoded = json_decode($body, true);
+
+        if (! is_array($decoded)) {
+            return [
+                'result' => false,
+                'message' => 'Некорректный ответ BOT-T API',
+                'data' => [],
+            ];
+        }
+
+        if ($response->getStatusCode() >= 400 && empty($decoded['message'])) {
+            $decoded['result'] = false;
+            $decoded['message'] = 'Ошибка BOT-T API (HTTP ' . $response->getStatusCode() . ')';
+        }
+
+        return $decoded;
+    }
+
+    /**
      * Проверка $secret_key
      *
      * @param int $telegram_id
      * @param string $secret_key
      * @param string $public_key
      * @param string $private_key
-     * @return mixed
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return array<string, mixed>
      */
-    public static function checkUser(int $telegram_id, string $secret_key, string $public_key, string $private_key)
+    public static function checkUser(int $telegram_id, string $secret_key, string $public_key, string $private_key): array
     {
-        $requestParam = [
+        if ($secret_key === '') {
+            return ['result' => false, 'message' => 'Секретный ключ не указан', 'data' => []];
+        }
+
+        $result = self::postModuleUser('check-secret', [
             'public_key' => $public_key,
             'private_key' => $private_key,
             'id' => $telegram_id,
             'secret_key' => $secret_key,
-        ];
+        ]);
 
-        $client = new Client(['base_uri' => self::HOST]);
-        $response = $client->get('v1/module/user/check-secret?' . http_build_query($requestParam));
+        if (($result['result'] ?? false) === false) {
+            $result['message'] = self::normalizeUserErrorMessage($result['message'] ?? 'Ошибка проверки пользователя');
+        }
 
-        $result = $response->getBody()->getContents();
-        return json_decode($result, true);
+        return $result;
     }
 
     /**
@@ -41,22 +80,15 @@ class BottApi
      * @param int $telegram_id
      * @param string $public_key
      * @param string $private_key
-     * @return array
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return array<string, mixed>
      */
     public static function get(int $telegram_id, string $public_key, string $private_key): array
     {
-        $requestParam = [
+        return self::postModuleUser('get', [
             'public_key' => $public_key,
             'private_key' => $private_key,
             'id' => $telegram_id,
-        ];
-
-        $client = new Client(['base_uri' => self::HOST]);
-        $response = $client->get('v1/module/user/get?' . http_build_query($requestParam));
-
-        $result = $response->getBody()->getContents();
-        return json_decode($result, true);
+        ]);
     }
 
     /**
@@ -66,36 +98,18 @@ class BottApi
      * @param array $userData
      * @param int $amount
      * @param string $comment
-     * @return mixed
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return array<string, mixed>
      */
-    public static function subtractBalance(BotDto $botDto, array $userData, int $amount, string $comment)
+    public static function subtractBalance(BotDto $botDto, array $userData, int $amount, string $comment): array
     {
-        $link = 'https://api.bot-t.com/v1/module/user/';
-        $public_key = $botDto->public_key;
-        $private_key = $botDto->private_key;
-        $user_id = $userData['user']['telegram_id'];
-        $secret_key = $userData['secret_user_key'];
-
-        $requestParam = [
-            'public_key' => $public_key,
-            'private_key' => $private_key,
-            'user_id' => $user_id,
-            'secret_key' => $secret_key,
+        return self::postModuleUser('subtract-balance', [
+            'public_key' => $botDto->public_key,
+            'private_key' => $botDto->private_key,
+            'user_id' => $userData['user']['telegram_id'],
+            'secret_key' => $userData['secret_user_key'],
             'amount' => $amount,
             'comment' => $comment,
-        ];
-
-        $client = new Client(['base_uri' => $link]);
-        $response = $client->request('POST', 'subtract-balance', [
-            'form_params' => $requestParam,
-            'headers' => [
-                'User-Agent' => $comment,
-            ]
         ]);
-
-        $result = $response->getBody()->getContents();
-        return json_decode($result, true);
     }
 
     /**
@@ -105,67 +119,59 @@ class BottApi
      * @param array $userData
      * @param int $amount
      * @param string $comment
-     * @return mixed
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return array<string, mixed>
      */
-    public static function addBalance(BotDto $botDto, array $userData, int $amount, string $comment)
+    public static function addBalance(BotDto $botDto, array $userData, int $amount, string $comment): array
     {
-        $link = 'https://api.bot-t.com/v1/module/user/';
-        $public_key = $botDto->public_key;
-        $private_key = $botDto->private_key;
-        $user_id = $userData['user']['telegram_id'];
-        $secret_key = $userData['secret_user_key'];
-
-        $requestParam = [
-            'public_key' => $public_key,
-            'private_key' => $private_key,
-            'user_id' => $user_id,
-            'secret_key' => $secret_key,
+        return self::postModuleUser('add-balance', [
+            'public_key' => $botDto->public_key,
+            'private_key' => $botDto->private_key,
+            'user_id' => $userData['user']['telegram_id'],
+            'secret_key' => $userData['secret_user_key'],
             'amount' => $amount,
             'comment' => $comment,
-        ];
-
-        $client = new Client(['base_uri' => $link]);
-        $response = $client->request('POST', 'add-balance', [
-            'form_params' => $requestParam,
-            'headers' => [
-                'User-Agent' => $comment,
-            ]
         ]);
-
-        $result = $response->getBody()->getContents();
-        return json_decode($result, true);
     }
 
-    public static function createOrder(BotDto $botDto, array $userData, int $amount, string $product)
+    /**
+     * @return array<string, mixed>
+     */
+    public static function createOrder(BotDto $botDto, array $userData, int $amount, string $product): array
     {
-        $link = 'https://api.bot-t.com/v1/module/shop/';
-        $public_key = $botDto->public_key;
-        $private_key = $botDto->private_key;
-        $user_id = $userData['user']['telegram_id'];
-        $secret_key = $userData['secret_user_key'];
-        $category_id = $botDto->category_id;
-
-        $requestParam = [
-            'public_key' => $public_key,
-            'private_key' => $private_key,
-            'user_id' => $user_id,
-            'secret_key' => $secret_key,
-            'amount' => $amount,
-            'count' => 1,
-            'category_id' => $category_id,
-            'product' => $product,
-        ];
-
-        $client = new Client(['base_uri' => $link]);
-        $response = $client->request('POST', 'order-create', [
-            'form_params' => $requestParam,
-            'headers' => [
-                'User-Agent' => $product,
-            ]
+        $client = new Client([
+            'base_uri' => 'https://api.bot-t.com/v1/module/shop/',
+            'timeout' => 15,
+            'connect_timeout' => 5,
         ]);
 
-        $result = $response->getBody()->getContents();
-        return json_decode($result, true);
+        $response = $client->request('POST', 'order-create', [
+            'form_params' => [
+                'public_key' => $botDto->public_key,
+                'private_key' => $botDto->private_key,
+                'user_id' => $userData['user']['telegram_id'],
+                'secret_key' => $userData['secret_user_key'],
+                'amount' => $amount,
+                'count' => 1,
+                'category_id' => $botDto->category_id,
+                'product' => $product,
+            ],
+            'headers' => [
+                'User-Agent' => $product,
+            ],
+            'http_errors' => false,
+        ]);
+
+        $decoded = json_decode((string) $response->getBody()->getContents(), true);
+
+        return is_array($decoded) ? $decoded : ['result' => false, 'message' => 'Некорректный ответ BOT-T API'];
+    }
+
+    private static function normalizeUserErrorMessage(string $message): string
+    {
+        if (stripos($message, 'secret key not valid') !== false) {
+            return 'Неверный секретный ключ пользователя или telegram_id';
+        }
+
+        return $message;
     }
 }

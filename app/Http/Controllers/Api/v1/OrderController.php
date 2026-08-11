@@ -77,7 +77,7 @@ class OrderController extends Controller
             return ApiHelpers::error($r->getMessage());
         } catch (Exception $e) {
             BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
-            \Log::error($e->getMessage());
+            \Log::error(\App\Support\SafeLog::exceptionMessage($e));
             return ApiHelpers::error('Orders error');
         }
     }
@@ -159,7 +159,7 @@ class OrderController extends Controller
             $user = User::query()->where(['telegram_id' => $request->user_id])->first();
             if (is_null($request->order_id))
                 return ApiHelpers::error('Not found params: order_id');
-            $order = Order::query()->where(['org_id' => $request->order_id])->first();
+            $order = $this->findOrderByOrgId($request->order_id);
             if (is_null($request->user_secret_key))
                 return ApiHelpers::error('Not found params: user_secret_key');
             if (is_null($request->public_key))
@@ -182,7 +182,7 @@ class OrderController extends Controller
 
             $this->orderService->order($result['data'], $botDto, $order);
 
-            $order = Order::query()->where(['org_id' => $request->order_id])->first();
+            $order = $this->findOrderByOrgId($request->order_id);
             return ApiHelpers::success(OrderResource::generateOrderArray($order));
         } catch (Exception $e) {
             return ApiHelpers::errorNew($e->getMessage());
@@ -209,7 +209,7 @@ class OrderController extends Controller
             $user = User::query()->where(['telegram_id' => $request->user_id])->first();
             if (is_null($request->order_id))
                 return ApiHelpers::error('Not found params: order_id');
-            $order = Order::query()->where(['org_id' => $request->order_id])->first();
+            $order = $this->findOrderByOrgId($request->order_id);
             if (is_null($request->user_secret_key))
                 return ApiHelpers::error('Not found params: user_secret_key');
             if (is_null($request->public_key))
@@ -231,7 +231,7 @@ class OrderController extends Controller
 
             $result = $this->orderService->second($botDto, $order);
 
-            $order = Order::query()->where(['org_id' => $request->order_id])->first();
+            $order = $this->findOrderByOrgId($request->order_id);
             return ApiHelpers::success(OrderResource::generateOrderArray($order));
         } catch (Exception $e) {
             return ApiHelpers::errorNew($e->getMessage());
@@ -258,7 +258,7 @@ class OrderController extends Controller
             $user = User::query()->where(['telegram_id' => $request->user_id])->first();
             if (is_null($request->order_id))
                 return ApiHelpers::error('Not found params: order_id');
-            $order = Order::query()->where(['org_id' => $request->order_id])->first();
+            $order = $this->findOrderByOrgId($request->order_id);
             if (is_null($request->user_secret_key))
                 return ApiHelpers::error('Not found params: user_secret_key');
             if (is_null($request->public_key))
@@ -280,7 +280,7 @@ class OrderController extends Controller
 
             $result = $this->orderService->confirm($botDto, $order);
 
-            $order = Order::query()->where(['org_id' => $request->order_id])->first();
+            $order = $this->findOrderByOrgId($request->order_id);
             return ApiHelpers::success(OrderResource::generateOrderArray($order));
         } catch (Exception $e) {
             return ApiHelpers::errorNew($e->getMessage());
@@ -308,7 +308,7 @@ class OrderController extends Controller
             $user = User::query()->where(['telegram_id' => $request->user_id])->first();
             if (is_null($request->order_id))
                 return ApiHelpers::error('Not found params: order_id');
-            $order = Order::query()->where(['org_id' => $request->order_id])->first();
+            $order = $this->findOrderByOrgId($request->order_id);
             if (is_null($request->user_secret_key))
                 return ApiHelpers::error('Not found params: user_secret_key');
             if (is_null($request->public_key))
@@ -330,10 +330,20 @@ class OrderController extends Controller
 
             $result = $this->orderService->cancel($result['data'], $botDto, $order);
 
-            $order = Order::query()->where(['org_id' => $request->order_id])->first();
+            $order = $this->findOrderByOrgId($request->order_id);
             return ApiHelpers::success(OrderResource::generateOrderArray($order));
         } catch (Exception $e) {
             return ApiHelpers::errorNew($e->getMessage());
         }
+    }
+
+    private function findOrderByOrgId(string $orgId): Order
+    {
+        $order = Order::query()->where(['org_id' => $orgId])->first();
+        if (!$order instanceof Order) {
+            throw new RuntimeException('Order not found');
+        }
+
+        return $order;
     }
 }

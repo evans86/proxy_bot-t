@@ -47,7 +47,7 @@ class ProxyController extends Controller
             return ApiHelpers::error('Ошибка получения данных провайдера');
         } catch (\Exception $e) {
             BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
-            \Log::error($e->getMessage());
+            \Log::error(\App\Support\SafeLog::exceptionMessage($e));
             return ApiHelpers::error('Get proxy error');
         }
     }
@@ -80,7 +80,7 @@ class ProxyController extends Controller
             return ApiHelpers::error('Ошибка получения данных провайдера');
         } catch (\Exception $e) {
             BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
-            \Log::error($e->getMessage());
+            \Log::error(\App\Support\SafeLog::exceptionMessage($e));
             return ApiHelpers::error('Get count error');
         }
     }
@@ -115,7 +115,7 @@ class ProxyController extends Controller
             return ApiHelpers::error('Ошибка получения данных провайдера');
         } catch (\Exception $e) {
             BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
-            \Log::error($e->getMessage());
+            \Log::error(\App\Support\SafeLog::exceptionMessage($e));
             return ApiHelpers::error('Get price error');
         }
     }
@@ -179,7 +179,7 @@ class ProxyController extends Controller
             return ApiHelpers::error($r->getMessage());
         } catch (\Exception $e) {
             BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
-            \Log::error($e->getMessage());
+            \Log::error(\App\Support\SafeLog::exceptionMessage($e));
             return ApiHelpers::error('Buy proxy error');
         }
     }
@@ -223,7 +223,7 @@ class ProxyController extends Controller
             return ApiHelpers::error($r->getMessage());
         } catch (\Exception $e) {
             BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
-            \Log::error($e->getMessage());
+            \Log::error(\App\Support\SafeLog::exceptionMessage($e));
             return ApiHelpers::error('Get orders error');
         }
     }
@@ -270,7 +270,7 @@ class ProxyController extends Controller
             return ApiHelpers::error($r->getMessage());
         } catch (\Exception $e) {
             BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
-            \Log::error($e->getMessage());
+            \Log::error(\App\Support\SafeLog::exceptionMessage($e));
             return ApiHelpers::error('Check work error');
         }
     }
@@ -320,7 +320,7 @@ class ProxyController extends Controller
             return ApiHelpers::error($r->getMessage());
         } catch (\Exception $e) {
             BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
-            \Log::error($e->getMessage());
+            \Log::error(\App\Support\SafeLog::exceptionMessage($e));
             return ApiHelpers::error('Update type error');
         }
     }
@@ -368,7 +368,7 @@ class ProxyController extends Controller
             return ApiHelpers::error($r->getMessage());
         } catch (\Exception $e) {
             BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
-            \Log::error($e->getMessage());
+            \Log::error(\App\Support\SafeLog::exceptionMessage($e));
             return ApiHelpers::error('Delete proxy error');
         }
     }
@@ -426,7 +426,7 @@ class ProxyController extends Controller
             return ApiHelpers::error($r->getMessage());
         } catch (\Exception $e) {
             BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
-            \Log::error($e->getMessage());
+            \Log::error(\App\Support\SafeLog::exceptionMessage($e));
             return ApiHelpers::error('Prolong proxy error');
         }
     }

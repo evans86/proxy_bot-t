@@ -51,7 +51,7 @@ class CountryController extends Controller
             return ApiHelpers::error('Ошибка получения данных провайдера');
         } catch (\Exception $e) {
             BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
-            \Log::error($e->getMessage());
+            \Log::error(\App\Support\SafeLog::exceptionMessage($e));
             return ApiHelpers::error('Get country error');
         }
     }

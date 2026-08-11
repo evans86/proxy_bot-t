@@ -54,7 +54,7 @@ class BotController extends Controller
             return ApiHelpers::error($r->getMessage());
         } catch (\Exception $e) {
             BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
-            \Log::error($e->getMessage());
+            \Log::error(\App\Support\SafeLog::exceptionMessage($e));
             return ApiHelpers::error('Module creation error');
         }
     }
@@ -77,7 +77,7 @@ class BotController extends Controller
             return ApiHelpers::error($r->getMessage());
         } catch (\Exception $e) {
             BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
-            \Log::error($e->getMessage());
+            \Log::error(\App\Support\SafeLog::exceptionMessage($e));
             return ApiHelpers::error('Module get error');
         }
     }
@@ -99,7 +99,7 @@ class BotController extends Controller
             return ApiHelpers::error($r->getMessage());
         } catch (\Exception $e) {
             BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
-            \Log::error($e->getMessage());
+            \Log::error(\App\Support\SafeLog::exceptionMessage($e));
             return ApiHelpers::error('Module update error');
         }
     }
@@ -126,7 +126,7 @@ class BotController extends Controller
             return ApiHelpers::error($r->getMessage());
         } catch (\Exception $e) {
             BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
-            \Log::error($e->getMessage());
+            \Log::error(\App\Support\SafeLog::exceptionMessage($e));
 
             return ApiHelpers::error('Module rotate private key error');
         }
@@ -158,7 +158,7 @@ class BotController extends Controller
             return ApiHelpers::error($r->getMessage());
         } catch (\Exception $e) {
             BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
-            \Log::error($e->getMessage());
+            \Log::error(\App\Support\SafeLog::exceptionMessage($e));
             return ApiHelpers::error('Module get settings error');
         }
     }
@@ -179,7 +179,7 @@ class BotController extends Controller
             return ApiHelpers::error($r->getMessage());
         } catch (\Exception $e) {
             BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . $e->getMessage());
-            \Log::error($e->getMessage());
+            \Log::error(\App\Support\SafeLog::exceptionMessage($e));
             return ApiHelpers::error('Module delete error');
         }
     }
