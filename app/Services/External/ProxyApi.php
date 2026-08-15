@@ -22,18 +22,11 @@ class ProxyApi
 
     private function createClient(): Client
     {
-        $options = [
+        return new Client([
             'base_uri' => $this->apiBase(),
             'timeout' => 15,
             'connect_timeout' => 5,
-        ];
-
-        $proxy = config('services.proxy6_outbound_proxy');
-        if (!empty($proxy)) {
-            $options['proxy'] = $proxy;
-        }
-
-        return new Client($options);
+        ]);
     }
 
     private function request(string $method, array $params = []): array

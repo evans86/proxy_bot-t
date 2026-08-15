@@ -14,7 +14,6 @@ class SafeLog
         'secret_user_key',
         'api_key',
         'password',
-        'PROXY6_OUTBOUND_PROXY',
     ];
 
     public static function sanitize(?string $text): string

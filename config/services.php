@@ -34,8 +34,6 @@ return [
         'key' => env('PROXY_KEY'),
     ],
 
-    'proxy6_outbound_proxy' => env('PROXY6_OUTBOUND_PROXY'),
-
     'proxy6_api_base' => env('PROXY6_API_BASE', 'https://px6.link/api/'),
 
     'bot_api_keys' => [
