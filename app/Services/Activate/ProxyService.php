@@ -221,24 +221,24 @@ class ProxyService extends MainService
             $proxy->save();
 
             $result = [
-                'order_org_id' => $order->prolong_org_id,
-                'proxy' => $order->proxy->version,
+                'order_org_id' => $proxy->prolong_org_id,
+                'proxy' => $proxy->proxy->version,
                 'country' => [
-                    'org_id' => $order->country->iso_two,
-                    'name_ru' => $order->country->name_ru,
-                    'name_en' => $order->country->name_en,
-                    'image' => $order->country->image
+                    'org_id' => $proxy->country->iso_two,
+                    'name_ru' => $proxy->country->name_ru,
+                    'name_en' => $proxy->country->name_en,
+                    'image' => $proxy->country->image
                 ],
-                'price' => $order->price,
-                'host' => $order->host,
-                'port' => $order->port,
-                'user' => $order->user,
-                'pass' => $order->pass,
-                'type' => $order->type,
-                'ip' => $order->ip,
+                'price' => $proxy->price,
+                'host' => $proxy->host,
+                'port' => $proxy->port,
+                'user' => $proxy->user,
+                'pass' => $proxy->pass,
+                'type' => $proxy->type,
+                'ip' => $proxy->ip,
                 'status_org' => $proxy->status_org,
-                'start_time' => $order->start_time,
-                'end_time' => $order->end_time
+                'start_time' => $proxy->start_time,
+                'end_time' => $proxy->end_time
             ];
 
             return $result;
@@ -446,34 +446,55 @@ class ProxyService extends MainService
         }
 
         $result = [];
+        $isFirstRequest = true;
         foreach ($proxies as $key => $proxy) {
+            if (! $isFirstRequest) {
+                usleep(350000);
+            }
+            $isFirstRequest = false;
 
-            $countries = $proxyApi->getcountry($proxy->version);
-//            BotLogHelpers::notifyBotLog('(🔵E ' . __FUNCTION__ . ' Proxy): ' . json_encode($countries));
-            $countries = $countries['list'];
+            $cacheKey = 'proxy6_countries_' . md5($botDto->api_key) . '_v' . $proxy->version;
+            try {
+                $countryCodes = \Cache::remember($cacheKey, 900, function () use ($proxyApi, $proxy) {
+                    $response = $proxyApi->getcountry($proxy->version);
+                    if (! is_array($response) || ! isset($response['list']) || ! is_array($response['list'])) {
+                        return [];
+                    }
 
-            $countriesArr = [];
-            foreach ($countries as $country) {
-
-                try {
-                    $countryProxy = Country::query()->where(['iso_two' => $country])->first();
-
-                    array_push($countriesArr, [
-                        'org_id' => $countryProxy->iso_two,
-                        'name_ru' => $countryProxy->name_ru,
-                        'name_en' => $countryProxy->name_en,
-                        'image' => $countryProxy->image
-                    ]);
-                } catch (\Exception $e) {
-                    continue;
-                }
+                    return $response['list'];
+                });
+            } catch (\Throwable $e) {
+                Log::warning('formingProxy: getcountry failed', [
+                    'version' => $proxy->version,
+                    'message' => $e->getMessage(),
+                ]);
+                continue;
             }
 
-            array_push($result, [
+            if ($countryCodes === []) {
+                continue;
+            }
+
+            $countriesArr = [];
+            foreach ($countryCodes as $country) {
+                $countryProxy = Country::query()->where(['iso_two' => $country])->first();
+                if ($countryProxy === null) {
+                    continue;
+                }
+
+                $countriesArr[] = [
+                    'org_id' => $countryProxy->iso_two,
+                    'name_ru' => $countryProxy->name_ru,
+                    'name_en' => $countryProxy->name_en,
+                    'image' => $countryProxy->image,
+                ];
+            }
+
+            $result[] = [
                 'title' => $proxy->title,
                 'version' => $proxy->version,
-                'countries' => $countriesArr
-            ]);
+                'countries' => $countriesArr,
+            ];
         }
 
         return $result;
